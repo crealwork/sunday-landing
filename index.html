@@ -51,7 +51,7 @@
     .fade-in { animation: fadeIn 0.6s ease both; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     ::selection { background: #0A0A0A; color: white; }
-    #viewEmail, #viewSms { transition: opacity 0.25s ease; }
+    #viewEmail, #viewSms, #howViewText, #howViewEmail { transition: opacity 0.25s ease; }
     #headingVerb { transition: opacity 0.2s ease; color: #E63329; }
   </style>
 </head>
@@ -157,11 +157,10 @@
       <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]"><span id="howHeading" style="transition:opacity 0.3s ease">Just text Sunday.</span></h2>
       <p class="text-muted text-lg mb-14">Tell her about a contact. She does the rest.</p>
 
-      <div class="md:flex gap-12 items-start">
-        <!-- iMessage mock -->
+      <!-- VIEW: Text -->
+      <div id="howViewText" class="md:flex gap-12 items-start">
         <div class="md:w-1/2 mb-10 md:mb-0">
           <div class="imsg-frame px-0 py-0 overflow-hidden max-w-[340px] mx-auto">
-            <!-- Status bar -->
             <div class="flex items-center justify-between px-6 pt-3 pb-1">
               <span class="imsg-statusbar">9:41</span>
               <div class="flex items-center gap-1">
@@ -169,7 +168,6 @@
                 <svg class="w-5 h-5" fill="#000" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
               </div>
             </div>
-            <!-- Contact header -->
             <div class="flex flex-col items-center py-2 border-b border-gray-100">
               <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center mb-1">
                 <span class="text-white font-bold text-sm">S</span>
@@ -177,16 +175,13 @@
               <span class="font-semibold text-sm text-black">Sunday</span>
               <span class="text-[11px] text-gray-400">iMessage</span>
             </div>
-            <!-- Messages -->
             <div class="px-4 py-4 space-y-2 bg-white min-h-[180px]">
-              <!-- Photo attachment -->
               <div class="ml-10 overflow-hidden" style="border-radius: 18px 18px 4px 18px;">
                 <img src="sign-in-sheet.png" alt="Open House Visitor Sign-In Sheet" class="w-full rounded-none block" style="border-radius: 18px 18px 0 0;">
               </div>
               <div class="imsg-sent ml-10 p-3 px-4">Here is the list from last Open House at 1234 W 14th.</div>
               <div class="imsg-received mr-10 p-3 px-4">Got it. I see 4 visitors on the sheet. I'll add Sarah Chen, Mike Patterson, Priya Sharma, and James O'Brien to your leads and start reaching out today.</div>
             </div>
-            <!-- Input bar -->
             <div class="flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-white">
               <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">iMessage</div>
               <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
@@ -195,7 +190,6 @@
             </div>
           </div>
         </div>
-        <!-- Right side -->
         <div class="md:w-1/2 space-y-8">
           <div class="flex gap-4">
             <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
@@ -225,6 +219,75 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- VIEW: Email forward -->
+      <div id="howViewEmail" class="md:flex gap-12 items-start" style="display:none">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="gmail-frame overflow-hidden max-w-[400px] mx-auto">
+            <div class="flex items-center gap-3 px-4 py-3 bg-white border-b border-[#E8EAED]">
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+              <div class="flex-1"></div>
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </div>
+            <div class="px-5 pt-4 pb-2">
+              <p class="gmail-subject text-lg">Fwd: Inquiry about 45 Maple Drive</p>
+            </div>
+            <div class="flex items-start gap-3 px-5 py-3">
+              <div class="w-10 h-10 rounded-full bg-[#1A73E8] flex items-center justify-center flex-shrink-0 text-white font-semibold text-sm">Y</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline gap-2">
+                  <span class="font-semibold text-sm text-[#202124]">You</span>
+                  <span class="text-[11px] text-[#5F6368]">9:14 AM</span>
+                </div>
+                <p class="text-[12px] text-[#5F6368]">to sunday@havenreg.com</p>
+              </div>
+            </div>
+            <div class="px-5 pb-4 gmail-body">
+              <p class="text-[12px] text-[#5F6368] mb-3">---------- Forwarded message ----------</p>
+              <p>Hi, I saw your listing at 45 Maple Drive. Is it still available? I'd love to book a viewing this weekend.</p>
+              <p class="mt-3 font-semibold text-[#202124]">Sarah Thompson</p>
+              <p class="text-[#5F6368] text-sm">604-555-0298</p>
+            </div>
+            <div class="flex items-center gap-3 px-5 py-3 border-t border-[#E8EAED]">
+              <div class="flex-1 border border-[#E8EAED] rounded-full px-4 py-2 text-sm text-[#5F6368]">Reply</div>
+              <div class="flex gap-2">
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2 space-y-8">
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">Forward any inquiry</p>
+              <p class="text-muted">Got a listing inquiry? Just forward it to Sunday.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">She reads & responds</p>
+              <p class="text-muted">Sunday extracts the details and follows up instantly.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">You get a text when they're ready</p>
+              <p class="text-muted">No back-and-forth. Sunday handles it all.</p>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -705,17 +768,24 @@
     tabSms.className = tab === 'sms' ? active : inactive;
   }
 
-  // Rotate "How It Works" heading
+  // Rotate "How It Works" heading + content
   (function() {
     var el = document.getElementById('howHeading');
+    var textView = document.getElementById('howViewText');
+    var emailView = document.getElementById('howViewEmail');
     var lines = ['Just text Sunday.', 'Just forward an email.'];
+    var views = [textView, emailView];
     var i = 0;
     setInterval(function() {
       el.style.opacity = '0';
+      views[i].style.opacity = '0';
       setTimeout(function() {
+        views[i].style.display = 'none';
         i = (i + 1) % lines.length;
         el.textContent = lines[i];
+        views[i].style.cssText = 'opacity:0';
         el.style.opacity = '1';
+        requestAnimationFrame(function() { views[i].style.opacity = '1'; });
       }, 300);
     }, 3500);
   })();
