@@ -842,15 +842,33 @@
     howCurrent = tab;
   }
 
-  // Auto-rotate How It Works
-  var howRotate = setInterval(function() { switchHow(howCurrent === 'text' ? 'email' : 'text'); }, 4000);
-  document.getElementById('howTabText').addEventListener('click', function() { clearInterval(howRotate); });
-  document.getElementById('howTabEmail').addEventListener('click', function() { clearInterval(howRotate); });
+  // Visibility-aware auto-rotate
+  function visibilityRotate(sectionId, rotateFn, interval) {
+    var timer = null;
+    var stopped = false;
+    var observer = new IntersectionObserver(function(entries) {
+      if (stopped) return;
+      if (entries[0].isIntersecting) {
+        if (!timer) timer = setInterval(rotateFn, interval);
+      } else {
+        clearInterval(timer); timer = null;
+      }
+    }, { threshold: 0.3 });
+    observer.observe(document.getElementById(sectionId));
+    return function() { stopped = true; clearInterval(timer); timer = null; };
+  }
 
-  // Auto-rotate tabs
-  var autoRotate = setInterval(function() { switchTab(document.getElementById('viewSms').style.cssText.indexOf('none') > -1 ? 'sms' : 'email'); }, 4000);
-  document.getElementById('tabEmail').addEventListener('click', function() { clearInterval(autoRotate); });
-  document.getElementById('tabSms').addEventListener('click', function() { clearInterval(autoRotate); });
+  var stopHowRotate = visibilityRotate('howViewText', function() {
+    switchHow(howCurrent === 'text' ? 'email' : 'text');
+  }, 4000);
+  document.getElementById('howTabText').addEventListener('click', stopHowRotate);
+  document.getElementById('howTabEmail').addEventListener('click', stopHowRotate);
+
+  var stopTabRotate = visibilityRotate('viewEmail', function() {
+    switchTab(document.getElementById('viewSms').style.cssText.indexOf('none') > -1 ? 'sms' : 'email');
+  }, 4000);
+  document.getElementById('tabEmail').addEventListener('click', stopTabRotate);
+  document.getElementById('tabSms').addEventListener('click', stopTabRotate);
 
   // Floating CTA visibility
   var floatingCta = document.getElementById('floatingCta');
