@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sunday — AI Sales Admin</title>
+  <meta name="description" content="Meet Sunday. Your AI sales admin for realtors. She works your cold leads via text, email, and phone. $199/mo. No app required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            paper: '#FFFFFF',
+            muted: '#6B6B6B',
+            divider: '#E5E5E5',
+            surface: '#F5F5F5',
+            hover: '#F0F0F0',
+            accent: '#E63329',
+          },
+          fontFamily: {
+            heading: ['"Instrument Serif"', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    h1, h2, h3 { letter-spacing: 0.01em; }
+    h1 { letter-spacing: 0.015em; }
+    /* iMessage style */
+    .imsg-sent { background: #007AFF; color: white; border-radius: 18px 18px 4px 18px; font-size: 15px; line-height: 1.4; }
+    .imsg-received { background: #E9E9EB; color: #000; border-radius: 18px 18px 18px 4px; font-size: 15px; line-height: 1.4; }
+    .imsg-frame { background: #FFFFFF; border-radius: 40px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); border: 1px solid #E5E5E5; }
+    .imsg-statusbar { font-size: 12px; font-weight: 600; color: #000; }
+    /* Gmail style */
+    .gmail-frame { background: #FFFFFF; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.06); }
+    .gmail-header { border-bottom: 1px solid #E8EAED; }
+    .gmail-avatar { background: #E63329; color: white; border-radius: 50%; font-weight: 600; font-size: 14px; }
+    .gmail-label { font-size: 12px; color: #5F6368; }
+    .gmail-subject { font-size: 14px; font-weight: 600; color: #202124; }
+    .gmail-body { font-size: 14px; color: #3C4043; line-height: 1.6; }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    ::selection { background: #0A0A0A; color: white; }
+  </style>
+</head>
+<body class="bg-paper text-ink font-body antialiased">
+
+  <!-- ========== HERO ========== -->
+  <section class="bg-ink text-white min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="text-center px-6 py-16 sm:py-20 max-w-3xl mx-auto fade-in">
+      <p class="text-white/40 text-xs font-semibold tracking-[5px] uppercase mb-8">Introducing</p>
+
+      <h1 class="font-heading text-5xl sm:text-6xl md:text-8xl leading-[0.95] mb-6">
+        Meet Sunday.
+      </h1>
+
+      <p class="text-white/50 text-lg sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed">
+        Your AI sales admin for real estate. She works your cold leads via text, email, and phone — so you can focus on showings and closings.
+      </p>
+
+      <!-- Badges -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10">
+        <span class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/80 font-medium text-sm px-4 py-2 rounded-full">
+          <span class="w-1.5 h-1.5 bg-accent rounded-full"></span>
+          $99/mo — First 10 only
+        </span>
+        <span class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/80 font-medium text-sm px-4 py-2 rounded-full">
+          No app required
+        </span>
+      </div>
+
+      <div class="flex flex-col items-center gap-4">
+        <a href="#signup" class="inline-block bg-accent text-white font-semibold text-base px-8 py-3.5 rounded-full hover:bg-accent/85 transition">Claim My Spot</a>
+        <a href="#the-reality" class="inline-flex items-center gap-1.5 text-white/40 hover:text-white/70 text-sm font-medium transition">
+          See how it works
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROBLEM ========== -->
+  <section id="the-reality" class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-muted text-xs font-semibold tracking-[4px] uppercase mb-5">The Reality</p>
+      <h2 class="font-heading text-4xl md:text-6xl mb-14 leading-[1.05]">Every missed follow-up<br>is money you lost.</h2>
+      <div class="space-y-4">
+        <div class="bg-surface rounded-2xl p-6">
+          <p class="text-lg text-muted">Open house sign-ins <strong class="text-ink">never get a follow-up.</strong></p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6">
+          <p class="text-lg text-muted">Old buyer leads <strong class="text-ink">sit in your CRM collecting dust.</strong></p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6">
+          <p class="text-lg text-muted">You're running between showings all day — <strong class="text-ink">there's no time to nurture leads.</strong></p>
+        </div>
+      </div>
+      <div class="bg-ink text-white rounded-2xl p-6 mt-6 text-center">
+        <p class="text-lg">Hundreds of leads worth <strong>$0</strong> because nobody followed up.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DIVIDER ========== -->
+  <div class="max-w-3xl mx-auto px-6"><div class="border-t border-divider"></div></div>
+
+  <!-- ========== SOLUTION — MEET SUNDAY ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-muted text-xs font-semibold tracking-[4px] uppercase mb-5">The Solution</p>
+      <h2 class="font-heading text-5xl md:text-7xl mb-4">Sunday.</h2>
+      <p class="text-muted text-xl mb-12">Your AI-powered sales admin.</p>
+      <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-10">
+        <div class="bg-surface rounded-2xl p-6 text-center card-hover">
+          <p class="text-ink font-semibold text-sm mb-2">Her Own Email</p>
+          <p class="text-muted text-sm break-all">sunday@havenreg.com</p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6 text-center card-hover">
+          <p class="text-ink font-semibold text-sm mb-2">Her Own Phone</p>
+          <p class="text-muted text-sm">604-XXX-XXXX</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3">
+        <span class="inline-flex items-center gap-2 border border-divider rounded-full px-4 py-2 text-sm font-medium text-muted">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Text Sunday
+        </span>
+        <span class="inline-flex items-center gap-2 border border-divider rounded-full px-4 py-2 text-sm font-medium text-muted">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+          Email Sunday
+        </span>
+        <span class="inline-flex items-center gap-2 border border-divider rounded-full px-4 py-2 text-sm font-medium text-muted">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+          Forward an email
+        </span>
+      </div>
+      <p class="text-muted/60 text-sm mt-8">No app. No dashboard. No login.</p>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS — SMS DEMO ========== -->
+  <section class="py-24 px-6 bg-surface">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-muted text-xs font-semibold tracking-[4px] uppercase mb-5">How It Works</p>
+      <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]">Just text Sunday.</h2>
+      <p class="text-muted text-lg mb-14">Tell her about a contact. She does the rest.</p>
+
+      <div class="md:flex gap-12 items-start">
+        <!-- iMessage mock -->
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="imsg-frame px-0 py-0 overflow-hidden max-w-[340px] mx-auto">
+            <!-- Status bar -->
+            <div class="flex items-center justify-between px-6 pt-3 pb-1">
+              <span class="imsg-statusbar">9:41</span>
+              <div class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="#000" viewBox="0 0 24 24"><path d="M2 20h2V8H2v12zm4 0h2V4H6v16zm4 0h2v-8h-2v8zm4 0h2V9h-2v11zm4 0h2V2h-2v18z"/></svg>
+                <svg class="w-5 h-5" fill="#000" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <!-- Contact header -->
+            <div class="flex flex-col items-center py-2 border-b border-gray-100">
+              <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center mb-1">
+                <span class="text-white font-bold text-sm">S</span>
+              </div>
+              <span class="font-semibold text-sm text-black">Sunday</span>
+              <span class="text-[11px] text-gray-400">iMessage</span>
+            </div>
+            <!-- Messages -->
+            <div class="px-4 py-4 space-y-2 bg-white min-h-[180px]">
+              <div class="imsg-sent ml-10 p-3 px-4">Hey Sunday, new lead I got from the open house last Sunday</div>
+              <!-- Shared contact card -->
+              <div class="ml-10 bg-[#E9E9EB] rounded-2xl overflow-hidden" style="border-radius: 18px 18px 4px 18px;">
+                <div class="flex items-center gap-3 p-3 px-4">
+                  <div class="w-10 h-10 bg-[#C7C7CC] rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-[15px] text-black">Mike Chen</p>
+                    <p class="text-[13px] text-[#8E8E93]">604-555-0187</p>
+                  </div>
+                </div>
+                <div class="border-t border-[#D1D1D6] px-4 py-2 text-center">
+                  <span class="text-[#007AFF] text-[13px] font-medium">Contact Card</span>
+                </div>
+              </div>
+              <div class="imsg-received mr-10 p-3 px-4">Got it. I've added Mike Chen. I'll reach out today and keep you posted.</div>
+            </div>
+            <!-- Input bar -->
+            <div class="flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-white">
+              <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">iMessage</div>
+              <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right side -->
+        <div class="md:w-1/2 space-y-8">
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">Text a name + number</p>
+              <p class="text-muted">Met a buyer at an open house? Just text Sunday.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">Sunday handles outreach</p>
+              <p class="text-muted">Professional email from your brokerage's address.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">You get pinged when they're ready</p>
+              <p class="text-muted">No back-and-forth. Sunday handles everything until they want to book a showing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHAT SUNDAY SENDS ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]">Here's what Sunday<br>actually sends.</h2>
+      <p class="text-muted text-lg mb-14">Real outreach. From your company. Under her name.</p>
+
+      <div class="md:flex gap-12 items-start">
+        <!-- Gmail mock -->
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="gmail-frame overflow-hidden max-w-[400px] mx-auto">
+            <!-- Gmail top bar -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-white border-b border-[#E8EAED]">
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+              <div class="flex-1"></div>
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </div>
+            <!-- Subject -->
+            <div class="px-5 pt-4 pb-2">
+              <p class="gmail-subject text-lg">Great meeting you at the open house</p>
+              <span class="inline-block bg-[#E8EAED] text-[#5F6368] text-[11px] font-medium px-2 py-0.5 rounded mt-1">Inbox</span>
+            </div>
+            <!-- Sender -->
+            <div class="flex items-start gap-3 px-5 py-3">
+              <div class="gmail-avatar w-10 h-10 flex items-center justify-center flex-shrink-0">S</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline gap-2">
+                  <span class="font-semibold text-sm text-[#202124]">Sunday</span>
+                  <span class="text-[11px] text-[#5F6368]">10:23 AM</span>
+                </div>
+                <p class="text-[12px] text-[#5F6368] truncate">sunday@havenreg.com</p>
+                <p class="text-[12px] text-[#5F6368]">to mike.chen@email.com</p>
+              </div>
+              <svg class="w-5 h-5 text-[#5F6368] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v.01M12 12v.01M12 19v.01"/></svg>
+            </div>
+            <!-- Body -->
+            <div class="px-5 pb-5 gmail-body">
+              <p>Hi Mike,</p>
+              <br>
+              <p>This is Sunday from <strong class="text-[#202124]">Haven Real Estate Group</strong>. It was great meeting you at the open house on Oak Street — sounds like you're looking for a 3-bedroom in the area.</p>
+              <br>
+              <p>I'd love to help narrow things down. A few quick questions:</p>
+              <br>
+              <ul class="pl-5 space-y-1 text-[#3C4043] list-disc">
+                <li>What's your ideal move-in timeline?</li>
+                <li>Any must-haves (garage, yard, school district)?</li>
+                <li>Are you pre-approved for a mortgage?</li>
+              </ul>
+              <br>
+              <p>Happy to help with anything in the meantime.</p>
+              <br>
+              <p>Best,<br><strong class="text-[#202124]">Sunday</strong><br><span class="text-[#5F6368] text-xs">Haven Real Estate Group | 604-XXX-XXXX</span></p>
+            </div>
+            <!-- Gmail reply bar -->
+            <div class="flex items-center gap-3 px-5 py-3 border-t border-[#E8EAED]">
+              <div class="flex-1 border border-[#E8EAED] rounded-full px-4 py-2 text-sm text-[#5F6368]">Reply</div>
+              <div class="flex gap-2">
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right side -->
+        <div class="md:w-1/2 space-y-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[3px] text-muted mb-3">What Just Happened</p>
+            <p class="text-xl text-muted leading-relaxed">You texted one name. Sunday wrote a professional outreach email, sent it from <strong class="text-ink">your brokerage's address</strong>, and started qualifying the buyer.</p>
+          </div>
+          <div class="bg-surface rounded-2xl p-6">
+            <p class="font-semibold text-lg mb-2">You did nothing.</p>
+            <p class="text-muted">Sunday handled cold outreach, follow-up, and back-and-forth. You only hear when Mike is ready.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-surface rounded-2xl p-4 text-center">
+              <p class="text-2xl font-black text-ink">Auto</p>
+              <p class="text-sm text-muted mt-1">Follow-up schedule</p>
+            </div>
+            <div class="bg-surface rounded-2xl p-4 text-center">
+              <p class="text-2xl font-black text-ink">Her #</p>
+              <p class="text-sm text-muted mt-1">Not yours</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EMAIL FORWARDING ========== -->
+  <section class="py-24 px-6 bg-surface">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-14 leading-[1.05]">Or just forward<br>an email.</h2>
+      <div class="md:flex gap-12 items-start">
+        <!-- Gmail forwarded mock -->
+        <div class="md:w-1/2 mb-10 md:mb-0 space-y-4">
+          <div class="gmail-frame overflow-hidden max-w-[400px] mx-auto">
+            <!-- Gmail top bar -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-white border-b border-[#E8EAED]">
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+              <div class="flex-1"></div>
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </div>
+            <div class="px-5 pt-4 pb-2">
+              <p class="gmail-subject text-lg">Fwd: Inquiry about 45 Maple Drive listing</p>
+            </div>
+            <div class="flex items-start gap-3 px-5 py-3">
+              <div class="w-10 h-10 rounded-full bg-[#1A73E8] flex items-center justify-center flex-shrink-0 text-white font-semibold text-sm">Y</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline gap-2">
+                  <span class="font-semibold text-sm text-[#202124]">You</span>
+                  <span class="text-[11px] text-[#5F6368]">9:14 AM</span>
+                </div>
+                <p class="text-[12px] text-[#5F6368]">to sunday@havenreg.com</p>
+              </div>
+            </div>
+            <div class="px-5 pb-4 gmail-body">
+              <p class="text-[12px] text-[#5F6368] mb-3">---------- Forwarded message ----------</p>
+              <p>Hi, I saw your listing at 45 Maple Drive. Is it still available? I'd love to book a viewing this weekend if possible.</p>
+              <p class="mt-3 font-semibold text-[#202124]">Sarah Thompson</p>
+              <p class="text-[#5F6368] text-sm">604-555-0298</p>
+            </div>
+          </div>
+          <!-- Sunday iMessage reply -->
+          <div class="imsg-frame overflow-hidden max-w-[340px] mx-auto px-0 py-0">
+            <div class="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-gray-100">
+              <div class="w-7 h-7 bg-accent rounded-full flex items-center justify-center">
+                <span class="text-white font-bold text-[10px]">S</span>
+              </div>
+              <span class="font-semibold text-sm text-black">Sunday</span>
+              <span class="text-[11px] text-gray-400 ml-auto">just now</span>
+            </div>
+            <div class="px-4 py-3 bg-white">
+              <div class="imsg-received mr-6 p-3 px-4">Got it. Added Sarah Thompson to the system. Sending her a response now. I'll text you when she's ready to book a showing.</div>
+            </div>
+          </div>
+        </div>
+        <!-- Right side -->
+        <div class="md:w-1/2 space-y-6">
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">Forward any inquiry</p>
+              <p class="text-muted">Got a listing inquiry? Just forward it to Sunday.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">She reads & responds</p>
+              <p class="text-muted">Sunday extracts the details and follows up instantly.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-10 h-10 bg-ink rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-lg">You get a text when they're ready</p>
+              <p class="text-muted">No back-and-forth for you. Sunday handles it all.</p>
+            </div>
+          </div>
+          <div class="bg-ink text-white rounded-2xl p-5">
+            <p class="font-semibold">One forward. Sunday takes it from there.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SUNDAY EMAILS SARAH ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]">Sunday responds<br>to Sarah.</h2>
+      <p class="text-muted text-lg mb-14">Within minutes of your forward, Sarah gets a professional reply.</p>
+      <div class="md:flex gap-12 items-start">
+        <!-- Gmail reply mock -->
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="gmail-frame overflow-hidden max-w-[400px] mx-auto">
+            <div class="flex items-center gap-3 px-4 py-3 bg-white border-b border-[#E8EAED]">
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+              <div class="flex-1"></div>
+              <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </div>
+            <div class="px-5 pt-4 pb-2">
+              <p class="gmail-subject text-lg">Re: 45 Maple Drive viewing</p>
+            </div>
+            <div class="flex items-start gap-3 px-5 py-3">
+              <div class="gmail-avatar w-10 h-10 flex items-center justify-center flex-shrink-0">S</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline gap-2">
+                  <span class="font-semibold text-sm text-[#202124]">Sunday</span>
+                  <span class="text-[11px] text-[#5F6368]">10:16 AM</span>
+                </div>
+                <p class="text-[12px] text-[#5F6368] truncate">sunday@havenreg.com</p>
+                <p class="text-[12px] text-[#5F6368]">to sarah.thompson@gmail.com</p>
+              </div>
+            </div>
+            <div class="px-5 pb-5 gmail-body">
+              <p>Hi Sarah,</p>
+              <br>
+              <p>This is Sunday from <strong class="text-[#202124]">Haven Real Estate Group</strong>. Thanks for your interest in 45 Maple Drive — great choice!</p>
+              <br>
+              <p>The property is still available. Before we book a viewing, a couple of quick questions:</p>
+              <br>
+              <ul class="pl-5 space-y-1 text-[#3C4043] list-disc">
+                <li>What times work best this weekend?</li>
+                <li>Are you currently working with an agent?</li>
+                <li>Would you like to see similar listings in the area?</li>
+              </ul>
+              <br>
+              <p>Happy to answer any questions in the meantime.</p>
+              <br>
+              <p>Best,<br><strong class="text-[#202124]">Sunday</strong><br><span class="text-[#5F6368] text-xs">Haven Real Estate Group | 604-XXX-XXXX</span></p>
+            </div>
+            <div class="flex items-center gap-3 px-5 py-3 border-t border-[#E8EAED]">
+              <div class="flex-1 border border-[#E8EAED] rounded-full px-4 py-2 text-sm text-[#5F6368]">Reply</div>
+              <div class="flex gap-2">
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+                <svg class="w-5 h-5 text-[#5F6368]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 014-4h12"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right side -->
+        <div class="md:w-1/2 space-y-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[3px] text-muted mb-3">What Just Happened</p>
+            <p class="text-xl text-muted leading-relaxed">You forwarded one email. Sunday wrote a professional response, sent it from <strong class="text-ink">your brokerage's address</strong>, and started qualifying the buyer.</p>
+          </div>
+          <div class="bg-surface rounded-2xl p-6">
+            <p class="font-semibold text-lg mb-2">You did nothing.</p>
+            <p class="text-muted">Sunday handles the back-and-forth from here. When Sarah is ready to book a showing, Sunday texts you.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-surface rounded-2xl p-4 text-center">
+              <p class="text-2xl font-black text-ink">&lt; 2 min</p>
+              <p class="text-sm text-muted mt-1">Response time</p>
+            </div>
+            <div class="bg-surface rounded-2xl p-4 text-center">
+              <p class="text-2xl font-black text-ink">24/7</p>
+              <p class="text-sm text-muted mt-1">Even after hours</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MORNING BRIEFING ========== -->
+  <section class="py-24 px-6 bg-surface">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-2 leading-[1.05]">Your morning briefing.</h2>
+      <p class="text-muted text-lg mb-14">10 seconds. That's all it takes.</p>
+      <div class="md:flex gap-12 items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="imsg-frame px-0 py-0 overflow-hidden max-w-[340px] mx-auto">
+            <div class="flex items-center justify-between px-6 pt-3 pb-1">
+              <span class="imsg-statusbar">8:00</span>
+              <div class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="#000" viewBox="0 0 24 24"><path d="M2 20h2V8H2v12zm4 0h2V4H6v16zm4 0h2v-8h-2v8zm4 0h2V9h-2v11zm4 0h2V2h-2v18z"/></svg>
+                <svg class="w-5 h-5" fill="#000" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.34C7 21.4 7.6 22 8.33 22h7.34c.73 0 1.33-.6 1.33-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+              </div>
+            </div>
+            <div class="flex flex-col items-center py-2 border-b border-gray-100">
+              <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center mb-1">
+                <span class="text-white font-bold text-sm">S</span>
+              </div>
+              <span class="font-semibold text-sm text-black">Sunday</span>
+            </div>
+            <div class="px-4 py-4 space-y-2 bg-white">
+              <div class="imsg-received mr-6 p-3 px-4">
+                Morning. 3 things:<br><br>
+                <strong>1.</strong> Mike Chen replied: "When can I see 45 Maple?"<br>
+                &nbsp;&nbsp;Ready to book. Want his number? <strong>(Y)</strong><br><br>
+                <strong>2.</strong> Reached out to 12 leads yesterday.<br>
+                &nbsp;&nbsp;3 opened, 1 wants a showing. Following up.<br><br>
+                <strong>3.</strong> Sarah Thompson — 3rd follow-up today.<br>
+                &nbsp;&nbsp;Keep going? <strong>(Y/N)</strong>
+              </div>
+              <div class="imsg-sent ml-auto w-fit p-3 px-5 text-base font-bold">1Y 3Y</div>
+              <p class="text-center text-[11px] text-gray-400 pt-1">Delivered</p>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-white">
+              <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">iMessage</div>
+              <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2 space-y-10">
+          <div>
+            <p class="text-5xl font-black text-ink">8am</p>
+            <p class="text-muted mt-1">Sunday texts you a summary</p>
+          </div>
+          <div>
+            <p class="text-5xl font-black text-ink">Y / N</p>
+            <p class="text-muted mt-1">You reply. That's your entire job.</p>
+          </div>
+          <div>
+            <p class="text-5xl font-black text-muted/30">10 sec</p>
+            <p class="text-muted mt-1">Done. Back to the job site.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHAT YOU GET ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-14 leading-[1.05]">What you<br>actually get.</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-surface rounded-2xl p-6 card-hover">
+          <p class="font-semibold text-lg mb-2">Revenue from leads you already have.</p>
+          <p class="text-muted">Those old open house sign-ins and CRM contacts — Sunday turns them into showings and closings.</p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6 card-hover">
+          <p class="font-semibold text-lg mb-2">Your time back.</p>
+          <p class="text-muted">No more chasing. No more follow-up. You focus on showings, offers, and closing.</p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6 card-hover">
+          <p class="font-semibold text-lg mb-2">Speed.</p>
+          <p class="text-muted">Every inquiry gets a response. Not tomorrow. Not next week. Right away — even after hours.</p>
+        </div>
+        <div class="bg-surface rounded-2xl p-6 card-hover">
+          <p class="font-semibold text-lg mb-2">Sales presence without the salary.</p>
+          <p class="text-muted">A human assistant costs $35-50K/yr. Sunday costs $199/mo. Same work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHY DIFFERENT ========== -->
+  <section class="py-24 px-6 bg-ink text-white">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]">This is not software.</h2>
+      <p class="text-white/50 text-xl mb-12">Sunday is closer to hiring a person than buying a tool.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-5 text-center">
+          <p class="font-semibold text-sm">Own email & phone</p>
+          <p class="text-xs text-white/40 mt-1">Your brand stays clean</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-5 text-center">
+          <p class="font-semibold text-sm">Works every contact</p>
+          <p class="text-xs text-white/40 mt-1">Not just the hot ones</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-5 text-center">
+          <p class="font-semibold text-sm">Always on</p>
+          <p class="text-xs text-white/40 mt-1">Evenings, weekends</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-5 text-center">
+          <p class="font-semibold text-sm">No app to learn</p>
+          <p class="text-xs text-white/40 mt-1">You know how to text</p>
+        </div>
+      </div>
+      <div class="inline-block border border-white/20 rounded-2xl px-8 py-4">
+        <p class="font-semibold text-lg">She doesn't cherry-pick. She works the full list. All the time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== NEED MORE CUSTOMERS ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-14 leading-[1.05]">Need more clients?<br>Sunday can get them.</h2>
+      <div class="md:flex gap-12 items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <div class="imsg-frame px-0 py-0 overflow-hidden max-w-[340px] mx-auto">
+            <div class="flex flex-col items-center py-3 border-b border-gray-100">
+              <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center mb-1">
+                <span class="text-white font-bold text-sm">S</span>
+              </div>
+              <span class="font-semibold text-sm text-black">Sunday</span>
+            </div>
+            <div class="px-4 py-4 space-y-2 bg-white">
+              <div class="imsg-sent ml-10 p-3 px-4">Hey Sunday, I need more buyer leads. Start running some ads. $10/day budget.</div>
+              <div class="imsg-received mr-10 p-3 px-4">Got it. Setting up ads targeting first-time homebuyers in your area. You'll start seeing new leads in your morning briefing this week.</div>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 border-t border-gray-100 bg-white">
+              <div class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm text-gray-400">iMessage</div>
+              <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2">
+          <p class="text-xl text-muted leading-relaxed mb-6">Sunday doesn't just work your existing leads. She can <strong class="text-ink">generate new buyer and seller leads</strong> for you too — by setting up and running paid ads on your behalf.</p>
+          <div class="bg-surface border border-divider rounded-2xl p-5">
+            <p class="font-semibold text-lg">She generates them AND works them.</p>
+            <p class="text-muted mt-1">Full pipeline. One text to start.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRICING ========== -->
+  <section class="py-24 px-6 bg-surface">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-muted text-xs font-semibold tracking-[4px] uppercase mb-5">Simple Pricing</p>
+      <p class="font-heading text-7xl md:text-9xl text-ink">$199</p>
+      <p class="text-muted text-2xl mb-10">per month</p>
+      <div class="flex flex-wrap justify-center gap-3 mb-10">
+        <span class="bg-paper border border-divider rounded-full px-5 py-3 font-medium text-muted text-sm">Works 24/7</span>
+        <span class="bg-paper border border-divider rounded-full px-5 py-3 font-medium text-muted text-sm">No contract</span>
+        <span class="bg-paper border border-divider rounded-full px-5 py-3 font-medium text-muted text-sm">Cancel anytime</span>
+      </div>
+      <div class="bg-ink rounded-2xl px-8 py-5 inline-block mb-8">
+        <p class="text-white text-lg font-medium">Not happy after the first month? <span class="font-semibold">Full refund. No questions.</span></p>
+      </div>
+      <br>
+      <a href="#special-offer" class="inline-flex items-center gap-2 bg-ink text-white font-semibold text-base px-8 py-4 rounded-full hover:bg-ink/80 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Get Special Offer
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== COST COMPARISON ========== -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-heading text-4xl md:text-6xl mb-14 leading-[1.05]">How Sunday compares.</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Human Admin -->
+        <div class="bg-surface rounded-2xl p-8">
+          <p class="text-xs font-semibold uppercase tracking-[3px] text-muted mb-6">Human Assistant</p>
+          <div class="space-y-4">
+            <div><p class="text-muted text-sm">Hourly rate</p><p class="text-3xl font-black">$22<span class="text-lg font-normal text-muted">/hr</span></p></div>
+            <div><p class="text-muted text-sm">Part-time (40 hrs/mo)</p><p class="text-3xl font-black">$880<span class="text-lg font-normal text-muted">/mo</span></p></div>
+            <div><p class="text-muted text-sm">Annual</p><p class="text-3xl font-black">$10K+<span class="text-lg font-normal text-muted">/yr</span></p></div>
+            <div class="border-t border-divider pt-4"><p class="text-muted text-sm">+ tax, benefits, training, management</p></div>
+          </div>
+        </div>
+        <!-- Sunday -->
+        <div class="bg-ink text-white rounded-2xl p-8">
+          <p class="text-xs font-semibold uppercase tracking-[3px] text-white/40 mb-6">Sunday</p>
+          <div class="space-y-4">
+            <div><p class="text-white/40 text-sm">Monthly</p><p class="text-4xl font-black">$199<span class="text-lg font-normal text-white/40">/mo</span></p></div>
+            <div><p class="text-white/40 text-sm">Annual</p><p class="text-4xl font-black">~$2,000<span class="text-lg font-normal text-white/40">/yr</span></p></div>
+            <div class="border-t border-white/10 pt-4"><p class="text-white/60 text-sm">$0 other expenses. No tax. No benefits. No training.</p></div>
+          </div>
+        </div>
+        <!-- Savings -->
+        <div class="bg-surface rounded-2xl p-8 flex flex-col items-center justify-center text-center">
+          <p class="text-muted mb-3">You save</p>
+          <p class="text-6xl font-black text-ink">$8K+</p>
+          <p class="text-muted mt-2">per year</p>
+          <div class="w-12 h-[2px] bg-ink/20 my-4"></div>
+          <p class="text-muted text-sm">And Sunday works 24/7.<br>No sick days.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SPECIAL OFFER ========== -->
+  <section id="special-offer" class="py-24 px-6 bg-ink text-white">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-block border border-white/20 rounded-full px-6 py-2 mb-10">
+        <span class="text-white/60 text-xs font-semibold tracking-[3px] uppercase">Limited — First 10 Only</span>
+      </div>
+      <h2 class="font-heading text-5xl md:text-7xl mb-14 leading-[0.95]">Special launch<br>offer.</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+        <!-- 50% discount -->
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+          <p class="text-6xl font-black text-white mb-3">50%</p>
+          <p class="text-lg font-semibold mb-2">Lifetime Discount</p>
+          <p class="text-white/40 mb-5">on your monthly subscription</p>
+          <div class="flex items-center justify-center gap-4">
+            <span class="text-2xl text-white/30 line-through">$199/mo</span>
+            <span class="text-3xl font-black text-white">$99/mo</span>
+          </div>
+          <p class="text-white/50 text-sm font-medium mt-3">Locked in forever</p>
+        </div>
+        <!-- Setup waived -->
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+          <p class="text-6xl font-black text-white mb-3">$0</p>
+          <p class="text-lg font-semibold mb-2">Setup Fee Waived</p>
+          <p class="text-white/30 line-through mb-5">Normally $300</p>
+          <div class="text-left max-w-xs mx-auto space-y-2">
+            <p class="text-white/60"><span class="text-white mr-2">&#10003;</span> Own phone number</p>
+            <p class="text-white/60"><span class="text-white mr-2">&#10003;</span> Custom email domain</p>
+            <p class="text-white/60"><span class="text-white mr-2">&#10003;</span> 100% done-for-you setup</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-white/30">Only for our first 10 clients. Once they're taken, this offer is gone.</p>
+    </div>
+  </section>
+
+  <!-- ========== LEAD CAPTURE FORM ========== -->
+  <section id="signup" class="py-24 px-6 bg-paper">
+    <div class="max-w-md mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="font-heading text-4xl md:text-5xl mb-4">Be one of<br>the first 10.</h2>
+        <p class="text-muted text-lg">Lock in your lifetime 50% discount + free setup.</p>
+      </div>
+      <form id="leadForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-muted mb-1.5">Your Name</label>
+          <input type="text" name="name" required placeholder="e.g. John Smith" class="w-full px-4 py-3.5 rounded-xl bg-surface border border-divider text-ink placeholder-muted/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-muted mb-1.5">Company Name</label>
+          <input type="text" name="company" required placeholder="e.g. Smith Renovations" class="w-full px-4 py-3.5 rounded-xl bg-surface border border-divider text-ink placeholder-muted/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-muted mb-1.5">Phone Number</label>
+          <input type="tel" name="phone" required placeholder="e.g. 604-555-0123" class="w-full px-4 py-3.5 rounded-xl bg-surface border border-divider text-ink placeholder-muted/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-muted mb-1.5">Email</label>
+          <input type="email" name="email" required placeholder="e.g. john@company.com" class="w-full px-4 py-3.5 rounded-xl bg-surface border border-divider text-ink placeholder-muted/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition">
+        </div>
+        <button type="submit" id="submitBtn" class="w-full bg-accent text-white font-semibold text-base py-4 rounded-full hover:bg-accent/85 transition mt-2 flex items-center justify-center gap-3">
+          <svg id="spinner" class="hidden animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <span id="btnText">Claim My Spot</span>
+        </button>
+        <p id="formStatus" class="text-center text-muted text-sm mt-2"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="border-t border-divider py-10 px-6 text-center">
+    <p class="text-xs font-semibold tracking-[4px] uppercase text-muted/40 mb-2">Sunday</p>
+    <p class="text-sm text-muted">dan@redseal.pro</p>
+  </footer>
+
+  <!-- ========== FLOATING CTA BUTTON ========== -->
+  <a href="#special-offer" id="floatingCta" class="fixed bottom-6 right-6 bg-ink text-white font-semibold text-sm px-5 py-3 rounded-full shadow-lg hover:bg-ink/80 transition z-50 flex items-center gap-2 opacity-0 translate-y-4 pointer-events-none" style="transition: opacity 0.3s, transform 0.3s;">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Get Offer
+  </a>
+
+  <!-- Learn How It Works popup -->
+  <div id="learnPopup" class="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:max-w-xs z-50 bg-ink border border-white/10 rounded-2xl shadow-2xl px-5 py-4 flex flex-col items-center gap-3 opacity-0 translate-y-4 pointer-events-none" style="transition: opacity 0.3s, transform 0.3s;">
+    <p class="text-white font-medium text-sm text-center">Want to see how it works first?</p>
+    <div class="flex gap-2 w-full">
+      <button id="learnYes" class="flex-1 bg-white text-ink font-semibold text-sm py-2.5 rounded-full hover:bg-white/90 transition">Yes, show me</button>
+      <button id="learnNo" class="flex-1 bg-white/10 text-white font-medium text-sm py-2.5 rounded-full hover:bg-white/20 transition">No thanks</button>
+    </div>
+  </div>
+
+  <script>
+  // Floating CTA visibility
+  var floatingCta = document.getElementById('floatingCta');
+  var specialOffer = document.getElementById('special-offer');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY;
+    var offerTop = specialOffer.offsetTop;
+    if (scrollY > 600 && scrollY < offerTop - 200) {
+      floatingCta.style.opacity = '1';
+      floatingCta.style.transform = 'translateY(0)';
+      floatingCta.style.pointerEvents = 'auto';
+    } else {
+      floatingCta.style.opacity = '0';
+      floatingCta.style.transform = 'translateY(16px)';
+      floatingCta.style.pointerEvents = 'none';
+    }
+  });
+
+  // Form submission to Google Sheets
+  document.getElementById('leadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    var status = document.getElementById('formStatus');
+    var form = this;
+
+    btn.disabled = true;
+    document.getElementById('spinner').classList.remove('hidden');
+    document.getElementById('btnText').textContent = 'Submitting...';
+    status.textContent = '';
+
+    // Read referral param if present
+    var urlParams = new URLSearchParams(window.location.search);
+    var referrer = urlParams.get('ref') || '';
+
+    var data = {
+      name: form.name.value,
+      company: form.company.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      referred_by: referrer,
+      timestamp: new Date().toISOString()
+    };
+
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7tHXPoh61h-Pa6GFtT_CLvMkOiHMlP_rYc6lRf2NBpnbVlLxPyk3dBMDYnQ2IMAun/exec';
+
+    // Slugify company name for referral link
+    var companySlug = form.company.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function() {
+      window.location.href = '/thank-you.html?company=' + encodeURIComponent(companySlug);
+    }).catch(function() {
+      status.textContent = 'Something went wrong. Please email dan@redseal.pro directly.';
+      btn.disabled = false;
+      document.getElementById('spinner').classList.add('hidden');
+      document.getElementById('btnText').textContent = 'Claim My Spot';
+    });
+  });
+
+  // "Want to learn how it works?" popup
+  (function() {
+    var popup = document.getElementById('learnPopup');
+    var signupSection = document.getElementById('signup');
+    var shown = false;
+    var dismissed = false;
+    var reachedForm = false;
+    var lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', function() {
+      var currentY = window.scrollY;
+      var formTop = signupSection.offsetTop;
+
+      if (currentY >= formTop - 300) reachedForm = true;
+
+      if (reachedForm && !shown && !dismissed && currentY < lastScrollY && currentY < formTop - 100) {
+        popup.style.opacity = '1';
+        popup.style.transform = 'translateY(0)';
+        popup.style.pointerEvents = 'auto';
+        shown = true;
+      }
+
+      lastScrollY = currentY;
+    });
+
+    document.getElementById('learnYes').addEventListener('click', function() {
+      dismissPopup();
+      document.getElementById('the-reality').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('learnNo').addEventListener('click', function() {
+      dismissPopup();
+    });
+
+    function dismissPopup() {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(16px)';
+      popup.style.pointerEvents = 'none';
+      dismissed = true;
+    }
+  })();
+  </script>
+
+</body>
+</html>
