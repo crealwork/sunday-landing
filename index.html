@@ -715,8 +715,8 @@
   <section id="signup" class="py-24 px-6 bg-paper">
     <div class="max-w-md mx-auto">
       <div class="text-center mb-10">
-        <h2 class="font-heading text-4xl md:text-5xl mb-4">Join the<br>waitlist.</h2>
-        <p class="text-muted text-lg">Be the first to know when Sunday is ready.</p>
+        <h2 class="font-heading text-4xl md:text-5xl mb-4">Join the waitlist<br>& get <span class="text-accent">50% off</span> for life.</h2>
+        <p class="text-muted text-lg">Limited spots. Early members lock in half price forever.</p>
       </div>
       <form id="leadForm" class="space-y-4">
         <div>
@@ -737,7 +737,7 @@
         </div>
         <button type="submit" id="submitBtn" class="w-full bg-accent text-white font-semibold text-base py-4 rounded-full hover:bg-accent/85 transition mt-2 flex items-center justify-center gap-3">
           <svg id="spinner" class="hidden animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-          <span id="btnText">Join Waitlist</span>
+          <span id="btnText">Join Waitlist — 50% Off for Life</span>
         </button>
         <p id="formStatus" class="text-center text-muted text-sm mt-2"></p>
       </form>
@@ -893,7 +893,7 @@
       status.textContent = 'Something went wrong. Please email dan@redseal.pro directly.';
       btn.disabled = false;
       document.getElementById('spinner').classList.add('hidden');
-      document.getElementById('btnText').textContent = 'Join Waitlist';
+      document.getElementById('btnText').textContent = 'Join Waitlist — 50% Off for Life';
     });
   });
 
