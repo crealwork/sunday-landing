@@ -155,7 +155,23 @@
     <div class="max-w-3xl mx-auto">
       <p class="text-muted text-xs font-semibold tracking-[4px] uppercase mb-5">How It Works</p>
       <h2 class="font-heading text-4xl md:text-6xl mb-4 leading-[1.05]"><span id="howHeading" style="transition:opacity 0.3s ease">Just text Sunday.</span></h2>
-      <p class="text-muted text-lg mb-14">Tell her about a contact. She does the rest.</p>
+      <p class="text-muted text-lg mb-10">Tell her about a contact. She does the rest.</p>
+
+      <!-- Toggle -->
+      <div class="flex items-center gap-1 bg-white rounded-full p-1 w-fit mb-12 border border-divider">
+        <button id="howTabText" onclick="switchHow('text')" class="px-5 py-2 rounded-full text-sm font-semibold transition-all bg-ink text-white">
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Text
+          </span>
+        </button>
+        <button id="howTabEmail" onclick="switchHow('email')" class="px-5 py-2 rounded-full text-sm font-semibold transition-all text-muted">
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+            Email
+          </span>
+        </button>
+      </div>
 
       <!-- VIEW: Text -->
       <div id="howViewText" class="md:flex gap-12 items-start">
@@ -768,27 +784,40 @@
     tabSms.className = tab === 'sms' ? active : inactive;
   }
 
-  // Rotate "How It Works" heading + content
-  (function() {
-    var el = document.getElementById('howHeading');
+  // "How It Works" tab switcher
+  var howCurrent = 'text';
+  function switchHow(tab) {
+    if (tab === howCurrent) return;
+    var heading = document.getElementById('howHeading');
     var textView = document.getElementById('howViewText');
     var emailView = document.getElementById('howViewEmail');
-    var lines = ['Just text Sunday.', 'Just forward an email.'];
-    var views = [textView, emailView];
-    var i = 0;
-    setInterval(function() {
-      el.style.opacity = '0';
-      views[i].style.opacity = '0';
-      setTimeout(function() {
-        views[i].style.display = 'none';
-        i = (i + 1) % lines.length;
-        el.textContent = lines[i];
-        views[i].style.cssText = 'opacity:0';
-        el.style.opacity = '1';
-        requestAnimationFrame(function() { views[i].style.opacity = '1'; });
-      }, 300);
-    }, 3500);
-  })();
+    var tabText = document.getElementById('howTabText');
+    var tabEmail = document.getElementById('howTabEmail');
+    var active = 'px-5 py-2 rounded-full text-sm font-semibold transition-all bg-ink text-white';
+    var inactive = 'px-5 py-2 rounded-full text-sm font-semibold transition-all text-muted';
+    var hideView = tab === 'text' ? emailView : textView;
+    var showView = tab === 'text' ? textView : emailView;
+
+    heading.style.opacity = '0';
+    hideView.style.opacity = '0';
+    setTimeout(function() {
+      hideView.style.display = 'none';
+      heading.textContent = tab === 'text' ? 'Just text Sunday.' : 'Just forward an email.';
+      showView.style.cssText = 'opacity:0';
+      requestAnimationFrame(function() {
+        heading.style.opacity = '1';
+        showView.style.opacity = '1';
+      });
+    }, 250);
+    tabText.className = tab === 'text' ? active : inactive;
+    tabEmail.className = tab === 'email' ? active : inactive;
+    howCurrent = tab;
+  }
+
+  // Auto-rotate How It Works
+  var howRotate = setInterval(function() { switchHow(howCurrent === 'text' ? 'email' : 'text'); }, 4000);
+  document.getElementById('howTabText').addEventListener('click', function() { clearInterval(howRotate); });
+  document.getElementById('howTabEmail').addEventListener('click', function() { clearInterval(howRotate); });
 
   // Auto-rotate tabs
   var autoRotate = setInterval(function() { switchTab(document.getElementById('viewSms').style.cssText.indexOf('none') > -1 ? 'sms' : 'email'); }, 4000);
