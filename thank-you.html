@@ -94,8 +94,8 @@
 
   <script>
   var params = new URLSearchParams(window.location.search);
-  var company = params.get('company') || '';
-  var refLink = 'https://sundayable.com' + (company ? '?ref=' + company : '');
+  var phone = params.get('ref') || '';
+  var refLink = 'https://sundayable.com' + (phone ? '?ref=' + phone : '');
   var shareMsg = 'Hey — I just signed up for this AI sales admin called Sunday. She works your dead leads via text and email. Spots are filling up fast: ' + refLink;
 
   document.getElementById('refLinkDisplay').textContent = refLink.replace('https://', '');
