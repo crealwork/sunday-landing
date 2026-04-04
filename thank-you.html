@@ -46,8 +46,8 @@
 
     <!-- REFERRAL OFFER -->
     <div class="bg-surface border border-divider rounded-2xl p-6 mb-10 text-left">
-      <p class="font-semibold text-sm mb-3">Refer a friend, get 6 months free</p>
-      <p class="text-muted text-sm leading-relaxed mb-5">Share your referral link with a fellow realtor. If they sign up, <strong class="text-ink">you get 6 months free.</strong></p>
+      <p class="font-semibold text-sm mb-3">Skip the line — refer a friend</p>
+      <p class="text-muted text-sm leading-relaxed mb-5">Spots are filling fast. Share your link with a fellow realtor and <strong class="text-ink">move up in the early access queue.</strong></p>
       <div class="bg-paper border border-divider rounded-xl px-4 py-2.5 mb-4 text-sm text-muted truncate" id="refLinkDisplay">sundayable.com</div>
       <div class="space-y-3">
         <button id="copyBtn" class="w-full flex items-center justify-center gap-2 bg-ink text-white font-semibold py-3 px-6 rounded-full hover:bg-ink/80 transition">
@@ -96,12 +96,12 @@
   var params = new URLSearchParams(window.location.search);
   var company = params.get('company') || '';
   var refLink = 'https://sundayable.com' + (company ? '?ref=' + company : '');
-  var shareMsg = 'Hey, check this out — an AI sales admin that works your dead leads for $199/mo. ' + refLink;
+  var shareMsg = 'Hey — I just signed up for this AI sales admin called Sunday. She works your dead leads via text and email. Spots are filling up fast: ' + refLink;
 
   document.getElementById('refLinkDisplay').textContent = refLink.replace('https://', '');
 
   document.getElementById('smsShare').href = 'sms:?body=' + encodeURIComponent(shareMsg);
-  document.getElementById('emailShare').href = 'mailto:?subject=' + encodeURIComponent('Check this out — AI Sales Admin') + '&body=' + encodeURIComponent('Hey, I just signed up for this AI sales admin called Sunday. She works your dead leads via text and email for $199/mo. Thought you might be interested: ' + refLink);
+  document.getElementById('emailShare').href = 'mailto:?subject=' + encodeURIComponent('This AI sales admin is wild — spots filling up') + '&body=' + encodeURIComponent('Hey, I just got early access to Sunday — an AI that works your dead leads via text and email. They\'re onboarding realtors now and spots are going fast. Check it out: ' + refLink);
   document.getElementById('waShare').href = 'https://wa.me/?text=' + encodeURIComponent(shareMsg);
 
   document.getElementById('copyBtn').addEventListener('click', function() {
