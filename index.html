@@ -44,8 +44,8 @@
   </script>
   <style>
     html { scroll-behavior: smooth; }
-    h1, h2, h3 { letter-spacing: 0.01em; }
-    h1 { letter-spacing: 0.015em; }
+    h1, h2, h3 { letter-spacing: 0.025em; }
+    h1 { letter-spacing: 0.03em; }
     /* iMessage style */
     .imsg-sent { background: #007AFF; color: white; border-radius: 18px 18px 4px 18px; font-size: 15px; line-height: 1.4; }
     .imsg-received { background: #E9E9EB; color: #000; border-radius: 18px 18px 18px 4px; font-size: 15px; line-height: 1.4; }
@@ -809,7 +809,7 @@
         </div>
         <button type="submit" id="submitBtn" class="w-full bg-accent text-white font-semibold text-base py-4 rounded-md hover:bg-accent/85 transition mt-2 flex items-center justify-center gap-3">
           <svg id="spinner" class="hidden animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-          <span id="btnText">Join Waitlist — 50% Off for Life</span>
+          <span id="btnText">Join Waitlist — Get 50% Off for Life</span>
         </button>
         <p id="formStatus" class="text-center text-muted text-sm mt-2"></p>
       </form>
@@ -985,7 +985,7 @@
       status.textContent = 'Something went wrong. Please email hello@sundayable.com directly.';
       btn.disabled = false;
       document.getElementById('spinner').classList.add('hidden');
-      document.getElementById('btnText').textContent = 'Join Waitlist — 50% Off for Life';
+      document.getElementById('btnText').textContent = 'Join Waitlist — Get 50% Off for Life';
     });
   });
 
