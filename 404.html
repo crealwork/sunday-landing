@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — Sunday</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            paper: '#FFFFFF',
+            muted: '#6B6B6B',
+            divider: '#E5E5E5',
+            surface: '#F5F5F5',
+            accent: '#800020',
+          },
+          fontFamily: {
+            heading: ['"Instrument Serif"', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    h1, h2, h3 { letter-spacing: 0.015em; }
+    h1 { letter-spacing: 0.02em; }
+    ::selection { background: white; color: #0A0A0A; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    .fade-in-delay { animation: fadeIn 0.6s ease 0.15s both; }
+    .fade-in-delay-2 { animation: fadeIn 0.6s ease 0.3s both; }
+  </style>
+</head>
+<body class="bg-ink text-white font-body min-h-screen antialiased flex items-center justify-center">
+
+  <div class="text-center px-6 max-w-lg mx-auto">
+    <p class="text-white/40 text-xs font-semibold tracking-[4px] uppercase mb-6 fade-in">404</p>
+    <h1 class="font-heading text-5xl md:text-6xl mb-5 fade-in" style="line-height: 1.05">
+      Sunday couldn't<br>find that page.
+    </h1>
+    <p class="text-white/50 text-base leading-relaxed mb-10 fade-in-delay">
+      She's great at finding leads — just not this URL.<br>
+      Let's get you back on track.
+    </p>
+    <a href="/" class="inline-block bg-accent text-white font-semibold text-sm py-3 px-7 rounded-md hover:bg-accent/85 transition fade-in-delay-2">
+      Back to Home
+    </a>
+  </div>
+
+</body>
+</html>
