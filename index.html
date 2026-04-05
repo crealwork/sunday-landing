@@ -963,9 +963,15 @@
     document.getElementById('btnText').textContent = 'Submitting...';
     status.textContent = '';
 
-    // Read referral param if present
+    // Read referral from query param or vanity path (e.g. /cc, /dave)
     var urlParams = new URLSearchParams(window.location.search);
     var referrer = urlParams.get('ref') || '';
+    if (!referrer) {
+      var path = window.location.pathname.replace(/^\//, '');
+      if (path && path !== 'thank-you.html' && path !== '404.html') {
+        referrer = path;
+      }
+    }
 
     var data = {
       name: form.name.value,
