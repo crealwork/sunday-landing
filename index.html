@@ -987,6 +987,19 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }).then(function() {
+      // GA4 conversion event
+      gtag('event', 'generate_lead', {
+        currency: 'USD',
+        value: 99,
+        lead_source: referrer ? 'referral' : 'direct',
+        brokerage: form.company.value
+      });
+      // Meta Pixel conversion event
+      fbq('track', 'Lead', {
+        currency: 'USD',
+        value: 99,
+        content_name: 'Waitlist Signup'
+      });
       window.location.href = '/thank-you.html?ref=' + encodeURIComponent(phoneSlug);
     }).catch(function() {
       status.textContent = 'Something went wrong. Please email hello@sundayable.com directly.';
