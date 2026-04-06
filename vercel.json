@@ -3,6 +3,7 @@
     { "source": "/cc", "destination": "/?ref=cc" },
     { "source": "/dave", "destination": "/?ref=dave" },
     { "source": "/aiman", "destination": "/?ref=aiman" },
-    { "source": "/idealab", "destination": "/?ref=idealab" }
+    { "source": "/idealab", "destination": "/?ref=idealab" },
+    { "source": "/torontosophia", "destination": "/?ref=torontosophia" }
   ]
 }
