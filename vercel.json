@@ -4,6 +4,7 @@
     { "source": "/dave", "destination": "/?ref=dave" },
     { "source": "/aiman", "destination": "/?ref=aiman" },
     { "source": "/idealab", "destination": "/?ref=idealab" },
-    { "source": "/torontosophia", "destination": "/?ref=torontosophia" }
+    { "source": "/torontosophia", "destination": "/?ref=torontosophia" },
+    { "source": "/aha", "destination": "/?ref=aha" }
   ]
 }
