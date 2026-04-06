@@ -6,6 +6,7 @@
     { "source": "/idealab", "destination": "/?ref=idealab" },
     { "source": "/torontosophia", "destination": "/?ref=torontosophia" },
     { "source": "/aha", "destination": "/?ref=aha" },
-    { "source": "/yk", "destination": "/?ref=yk" }
+    { "source": "/yk", "destination": "/?ref=yk" },
+    { "source": "/tbt", "destination": "/?ref=tbt" }
   ]
 }
