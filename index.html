@@ -1008,6 +1008,21 @@
     }
   });
 
+  // Capture UTM params on first visit and persist for the session
+  (function captureUtms() {
+    var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var params = new URLSearchParams(window.location.search);
+    var hasUtm = utmKeys.some(function(k) { return params.has(k); });
+    if (!hasUtm) return;
+    var existing = {};
+    try { existing = JSON.parse(sessionStorage.getItem('sunday_utms') || '{}'); } catch (e) {}
+    // First-touch wins: don't overwrite if already captured earlier this session
+    if (existing.utm_source || existing.utm_campaign) return;
+    var utms = { landing_url: window.location.href, landing_referrer: document.referrer || '' };
+    utmKeys.forEach(function(k) { if (params.has(k)) utms[k] = params.get(k); });
+    sessionStorage.setItem('sunday_utms', JSON.stringify(utms));
+  })();
+
   // Form submission to Google Sheets
   document.getElementById('leadForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -1030,13 +1045,23 @@
       }
     }
 
+    var storedUtms = {};
+    try { storedUtms = JSON.parse(sessionStorage.getItem('sunday_utms') || '{}'); } catch (e) {}
+
     var data = {
       name: form.name.value,
       company: form.company.value,
       phone: form.phone.value,
       email: form.email.value,
       referred_by: referrer,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      utm_source: storedUtms.utm_source || '',
+      utm_medium: storedUtms.utm_medium || '',
+      utm_campaign: storedUtms.utm_campaign || '',
+      utm_content: storedUtms.utm_content || '',
+      utm_term: storedUtms.utm_term || '',
+      landing_url: storedUtms.landing_url || window.location.href,
+      landing_referrer: storedUtms.landing_referrer || document.referrer || ''
     };
 
     var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwri5L_GBnYDSL9kzfTkc19SGucpJy0WxRWrv_03g-1h5TpRhPuOd80mnuLMTv4Hdn7/exec';

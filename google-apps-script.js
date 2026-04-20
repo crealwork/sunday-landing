@@ -14,8 +14,15 @@
  * 4. Copy the new deployment URL and update GOOGLE_SCRIPT_URL in index.html
  */
 
+var SPREADSHEET_ID = '13Ay3qZXzNvffmKq6Lywj_Q762NNKaBAxVPEmep449pg';
 var SHEET_NAME = 'Leads';
 var NOTIFY_EMAILS = ['dan@sundayable.com', 'dave@sundayable.com'];
+
+var COLUMNS = [
+  'Timestamp', 'Name', 'Brokerage', 'Phone', 'Email', 'Referred By',
+  'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
+  'Landing URL', 'Landing Referrer'
+];
 
 function doPost(e) {
   try {
@@ -38,12 +45,20 @@ function doPost(e) {
 }
 
 function saveToSheet(data) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
 
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Timestamp', 'Name', 'Brokerage', 'Phone', 'Email', 'Referred By']);
+    sheet.appendRow(COLUMNS);
+  } else {
+    // Migration: if headers are missing the UTM columns, extend them in-place
+    var lastCol = sheet.getLastColumn();
+    if (lastCol < COLUMNS.length) {
+      var existingHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+      var newHeaders = COLUMNS.slice(lastCol);
+      sheet.getRange(1, lastCol + 1, 1, newHeaders.length).setValues([newHeaders]);
+    }
   }
 
   sheet.appendRow([
@@ -52,7 +67,14 @@ function saveToSheet(data) {
     data.company || '',
     data.phone || '',
     data.email || '',
-    data.referred_by || ''
+    data.referred_by || '',
+    data.utm_source || '',
+    data.utm_medium || '',
+    data.utm_campaign || '',
+    data.utm_content || '',
+    data.utm_term || '',
+    data.landing_url || '',
+    data.landing_referrer || ''
   ]);
 }
 
@@ -138,6 +160,8 @@ function buildEmailHtml(data) {
     + '</td>'
     + '</tr>'
 
+    + (data.utm_source || data.utm_campaign ? buildUtmRow(data) : '')
+
     + '<tr>'
     + '<td style="padding:8px 0;vertical-align:top;">'
     + '<p style="margin:0;font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;letter-spacing:1px;">Submitted</p>'
@@ -166,6 +190,24 @@ function buildEmailHtml(data) {
     + '</body></html>';
 }
 
+function buildUtmRow(data) {
+  var parts = [];
+  if (data.utm_campaign) parts.push('<strong style="color:#800020;">' + escapeHtml(data.utm_campaign) + '</strong>');
+  var smt = [];
+  if (data.utm_source) smt.push(escapeHtml(data.utm_source));
+  if (data.utm_medium) smt.push(escapeHtml(data.utm_medium));
+  if (data.utm_content) smt.push(escapeHtml(data.utm_content));
+  if (smt.length) parts.push('<span style="color:#6B6B6B;">' + smt.join(' / ') + '</span>');
+  return '<tr>'
+    + '<td style="padding:8px 0;vertical-align:top;">'
+    + '<p style="margin:0;font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;letter-spacing:1px;">Campaign</p>'
+    + '</td>'
+    + '<td style="padding:8px 0;text-align:right;">'
+    + '<p style="margin:0;font-size:14px;color:#0A0A0A;font-weight:500;line-height:1.4;">' + parts.join('<br>') + '</p>'
+    + '</td>'
+    + '</tr>';
+}
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -184,7 +226,14 @@ function testEmail() {
     phone: '604-555-0123',
     email: 'jane@example.com',
     referred_by: 'direct',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    utm_source: 'brevo',
+    utm_medium: 'email',
+    utm_campaign: 'masterclass_may5',
+    utm_content: 'hero_cta',
+    utm_term: '',
+    landing_url: 'https://www.sundayable.com/?utm_source=brevo&utm_medium=email&utm_campaign=masterclass_may5&utm_content=hero_cta',
+    landing_referrer: 'https://email.brevo.com/'
   };
   sendNotification(testData);
 }
