@@ -8,6 +8,7 @@
     { "source": "/aha", "destination": "/?ref=aha" },
     { "source": "/yk", "destination": "/?ref=yk" },
     { "source": "/tbt", "destination": "/?ref=tbt" },
-    { "source": "/wg", "destination": "/?ref=wg" }
+    { "source": "/wg", "destination": "/?ref=wg" },
+    { "source": "/masterclass", "destination": "/events/masterclass.html" }
   ]
 }
