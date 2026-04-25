@@ -385,10 +385,12 @@ function buildOnboardingEmailHtml(data) {
     + '</table>'
     + '</td></tr>'
 
-    // CTA
+    // CTAs
     + '<tr><td style="padding:24px 40px 32px;">'
+    + '<a href="https://docs.google.com/spreadsheets/d/' + encodeURIComponent(getOnboardingSpreadsheetId()) + '/edit" '
+    + 'style="display:inline-block;background:#0A0A0A;color:#ffffff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:6px;text-decoration:none;margin-right:8px;">Open Sheet &rarr;</a>'
     + '<a href="mailto:' + escapeHtml(data.email || '') + '?subject=' + encodeURIComponent('Your Sunday Sites mockup — ' + (data.name || '').split(' ')[0]) + '" '
-    + 'style="display:inline-block;background:#0A0A0A;color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;">Reply to ' + escapeHtml((data.name || 'Lead').split(' ')[0]) + '</a>'
+    + 'style="display:inline-block;background:#ffffff;color:#0A0A0A;font-size:14px;font-weight:600;padding:11px 24px;border-radius:6px;text-decoration:none;border:1px solid #E5E5E5;">Reply to ' + escapeHtml((data.name || 'Lead').split(' ')[0]) + '</a>'
     + '</td></tr>'
 
     // Footer
