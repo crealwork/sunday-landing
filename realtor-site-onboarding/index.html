@@ -299,6 +299,36 @@
               </div>
             </div>
 
+            <div>
+              <label class="block text-sm font-medium mb-3">Want to include client testimonials? <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-3">Client quotes carry a lot of weight on a realtor site. If you have any, share up to 3 — name + their words.</p>
+              <div class="radio-group" id="hasTestimonialsGroup">
+                <div class="radio-item"><input type="radio" id="testimonials-yes" name="hasTestimonials" value="Yes"><label for="testimonials-yes">Yes</label></div>
+                <div class="radio-item"><input type="radio" id="testimonials-no" name="hasTestimonials" value="No"><label for="testimonials-no">No / not yet</label></div>
+              </div>
+              <p class="error-msg" id="err-hasTestimonials">Please select an option.</p>
+
+              <div class="conditional-reveal" id="testimonialsReveal">
+                <div class="mt-4 space-y-5">
+                  <div>
+                    <label class="block text-xs font-medium mb-1.5 text-muted">Testimonial 1 — client name</label>
+                    <input type="text" id="testimonial1Name" name="testimonial1Name" class="field-input mb-2" placeholder="e.g. Jamie L., Coquitlam">
+                    <textarea id="testimonial1Text" name="testimonial1Text" rows="2" class="field-input resize-y" placeholder="What they said. Direct quote works best — copy-paste from the email or text they sent."></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1.5 text-muted">Testimonial 2 — client name (optional)</label>
+                    <input type="text" id="testimonial2Name" name="testimonial2Name" class="field-input mb-2" placeholder="">
+                    <textarea id="testimonial2Text" name="testimonial2Text" rows="2" class="field-input resize-y" placeholder=""></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium mb-1.5 text-muted">Testimonial 3 — client name (optional)</label>
+                    <input type="text" id="testimonial3Name" name="testimonial3Name" class="field-input mb-2" placeholder="">
+                    <textarea id="testimonial3Text" name="testimonial3Text" rows="2" class="field-input resize-y" placeholder=""></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div class="mt-8 flex items-center justify-between">
@@ -451,9 +481,8 @@
   <!-- Footer -->
   <footer class="max-w-xl mx-auto px-6 py-10 text-center">
     <p class="text-muted text-sm">
-      Questions? Email <a href="mailto:onboarding@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">onboarding@sundayable.com</a>
-      or text <!-- TODO: replace with onboarding contact number -->
-      <a href="tel:778-XXX-XXXX" class="text-ink underline underline-offset-2 hover:text-accent transition">778-XXX-XXXX</a>.
+      Questions? Email <a href="mailto:support@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">support@sundayable.com</a>
+      or text <a href="tel:+17783206226" class="text-ink underline underline-offset-2 hover:text-accent transition">778-320-6226</a>.
     </p>
   </footer>
 
@@ -540,8 +569,10 @@
     if (n === 2) {
       var specialty = getCheckedValues('specialty');
       var voice = document.getElementById('voice').value.trim();
+      var hasTestimonials = document.querySelector('input[name="hasTestimonials"]:checked');
       if (specialty.length === 0) { showError('specialty', 'Please select at least one specialty.'); valid = false; } else clearError('specialty');
       if (!voice) { showError('voice'); valid = false; } else clearError('voice');
+      if (!hasTestimonials) { showError('hasTestimonials', 'Please select an option.'); valid = false; } else clearError('hasTestimonials');
     }
 
     if (n === 3) {
@@ -586,6 +617,13 @@
   }
   document.querySelectorAll('input[name="specialty"]').forEach(function(cb) {
     cb.addEventListener('change', updatePresaleProjectsReveal);
+  });
+
+  // Testimonials reveal — only when "Yes" radio checked
+  document.querySelectorAll('input[name="hasTestimonials"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.getElementById('testimonialsReveal').classList.toggle('open', this.value === 'Yes');
+    });
   });
 
   // Domain URL reveal
@@ -644,6 +682,16 @@
       voice: document.getElementById('voice').value.trim(),
       presaleProjects: document.getElementById('presaleProjects').value.trim(),
       wantsListingsSearch: document.getElementById('wantsListingsSearch').checked ? 'Yes' : 'No',
+      hasTestimonials: (document.querySelector('input[name="hasTestimonials"]:checked') || {}).value || '',
+      testimonials: (function() {
+        var lines = [];
+        for (var i = 1; i <= 3; i++) {
+          var name = (document.getElementById('testimonial' + i + 'Name').value || '').trim();
+          var text = (document.getElementById('testimonial' + i + 'Text').value || '').trim();
+          if (name || text) lines.push((name || 'Anonymous') + ' — "' + text + '"');
+        }
+        return lines.join(' || ');
+      })(),
 
       hasDomain: hasDomain ? hasDomain.value : '',
       domainUrl: document.getElementById('domainUrl').value.trim(),

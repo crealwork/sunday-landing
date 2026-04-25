@@ -30,6 +30,7 @@ var ONBOARDING_COLUMNS = [
   'Brokerage Name', 'Brokerage Address', 'License Number',
   'Areas', 'Social Media',
   'Specialty', 'Voice', 'Presale Projects', 'Wants Listings Search',
+  'Has Testimonials', 'Testimonials',
   'Has Domain', 'Domain URL', 'Has Brand', 'Brand Drive Link', 'Fav Sites', 'Mood Word',
   'Headshot Drive Link', 'Languages', 'Avoid Note',
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
@@ -308,6 +309,8 @@ function buildClaudePromptForBuild(data) {
     '## Add-ons & content',
     '- Presale projects to feature: ' + (data.presaleProjects || '—'),
     '- Wants MLS/listings search: ' + (data.wantsListingsSearch || 'No'),
+    '- Has testimonials: ' + (data.hasTestimonials || '—'),
+    '- Testimonials: ' + (data.testimonials || '—'),
     '- Avoid: ' + (data.avoidNote || '—'),
   ].join('\n');
 }
@@ -355,6 +358,8 @@ function saveOnboardingToSheet(data) {
     data.voice || '',
     data.presaleProjects || '',
     data.wantsListingsSearch || '',
+    data.hasTestimonials || '',
+    data.testimonials || '',
     data.hasDomain || '',
     data.domainUrl || '',
     data.hasBrand || '',
@@ -456,6 +461,8 @@ function buildOnboardingEmailHtml(data) {
     + row('Voice', data.voice)
     + row('Presale Projects', data.presaleProjects)
     + row('Wants Listings Search', data.wantsListingsSearch)
+    + row('Has Testimonials', data.hasTestimonials)
+    + row('Testimonials', data.testimonials)
 
     + '<tr><td colspan="2" style="padding:12px 0 4px;"><div style="border-top:1px solid #F0F0F0;"></div></td></tr>'
 
