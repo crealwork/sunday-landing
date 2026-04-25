@@ -16,6 +16,7 @@
 
 var SPREADSHEET_ID = '13Ay3qZXzNvffmKq6Lywj_Q762NNKaBAxVPEmep449pg';
 var SHEET_NAME = 'Leads';
+var ONBOARDING_SHEET_NAME = 'RealtorOnboarding'; // formType: realtor-site-onboarding
 var NOTIFY_EMAILS = ['dan@sundayable.com', 'dave@sundayable.com'];
 
 var COLUMNS = [
@@ -24,15 +25,27 @@ var COLUMNS = [
   'Landing URL', 'Landing Referrer'
 ];
 
+var ONBOARDING_COLUMNS = [
+  'Timestamp', 'Name', 'Email', 'Cell', 'License or Brokerage', 'Areas', 'Specialty', 'Voice',
+  'Has Domain', 'Domain URL', 'Has Brand', 'Brand Drive Link', 'Fav Sites', 'Mood Word',
+  'Headshot Drive Link', 'Languages', 'Avoid Note',
+  'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
+  'Landing URL', 'Landing Referrer'
+];
+
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
 
-    // 1. Save to Google Sheet
-    saveToSheet(data);
-
-    // 2. Send email notification
-    sendNotification(data);
+    // Route by formType
+    if (data.formType === 'realtor-site-onboarding') {
+      saveOnboardingToSheet(data);
+      sendOnboardingNotification(data);
+    } else {
+      // Default: existing waitlist flow
+      saveToSheet(data);
+      sendNotification(data);
+    }
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: 'ok' }))
@@ -215,6 +228,168 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+// ─── Realtor Site Onboarding handlers ────────────────────────────────────────
+
+function saveOnboardingToSheet(data) {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName(ONBOARDING_SHEET_NAME);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(ONBOARDING_SHEET_NAME);
+    sheet.appendRow(ONBOARDING_COLUMNS);
+  } else {
+    var lastCol = sheet.getLastColumn();
+    if (lastCol < ONBOARDING_COLUMNS.length) {
+      var newHeaders = ONBOARDING_COLUMNS.slice(lastCol);
+      sheet.getRange(1, lastCol + 1, 1, newHeaders.length).setValues([newHeaders]);
+    }
+  }
+
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.name || '',
+    data.email || '',
+    data.cell || '',
+    data.licenseOrBrokerage || '',
+    data.areas || '',
+    data.specialty || '',
+    data.voice || '',
+    data.hasDomain || '',
+    data.domainUrl || '',
+    data.hasBrand || '',
+    data.brandDriveLink || '',
+    data.favSites || '',
+    data.moodWord || '',
+    data.headshotLink || '',
+    data.languages || '',
+    data.avoidNote || '',
+    data.utm_source || '',
+    data.utm_medium || '',
+    data.utm_campaign || '',
+    data.utm_content || '',
+    data.utm_term || '',
+    data.landing_url || '',
+    data.landing_referrer || ''
+  ]);
+}
+
+function sendOnboardingNotification(data) {
+  var subject = 'New realtor site onboarding: ' + (data.name || 'Unknown');
+  var html = buildOnboardingEmailHtml(data);
+
+  NOTIFY_EMAILS.forEach(function(email) {
+    MailApp.sendEmail({
+      to: email,
+      subject: subject,
+      htmlBody: html,
+      name: 'Sunday Sites',
+      replyTo: data.email || ''
+    });
+  });
+}
+
+function buildOnboardingEmailHtml(data) {
+  var timestamp = data.timestamp
+    ? new Date(data.timestamp).toLocaleString('en-US', { timeZone: 'America/Vancouver', dateStyle: 'medium', timeStyle: 'short' })
+    : new Date().toLocaleString('en-US', { timeZone: 'America/Vancouver', dateStyle: 'medium', timeStyle: 'short' });
+
+  function row(label, value) {
+    if (!value) return '';
+    return '<tr>'
+      + '<td style="padding:8px 0 8px 0;vertical-align:top;width:40%;">'
+      + '<p style="margin:0;font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;letter-spacing:1px;">' + label + '</p>'
+      + '</td>'
+      + '<td style="padding:8px 0;vertical-align:top;text-align:right;">'
+      + '<p style="margin:0;font-size:14px;color:#0A0A0A;font-weight:500;line-height:1.5;">' + escapeHtml(value) + '</p>'
+      + '</td>'
+      + '</tr>';
+  }
+
+  function linkRow(label, url) {
+    if (!url) return '';
+    return '<tr>'
+      + '<td style="padding:8px 0;vertical-align:top;width:40%;">'
+      + '<p style="margin:0;font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;letter-spacing:1px;">' + label + '</p>'
+      + '</td>'
+      + '<td style="padding:8px 0;text-align:right;">'
+      + '<a href="' + escapeHtml(url) + '" style="font-size:14px;color:#800020;font-weight:500;">' + escapeHtml(url) + '</a>'
+      + '</td>'
+      + '</tr>';
+  }
+
+  return '<!DOCTYPE html>'
+    + '<html><head><meta charset="utf-8"></head>'
+    + '<body style="margin:0;padding:0;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;">'
+    + '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:40px 20px;">'
+    + '<tr><td align="center">'
+    + '<table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">'
+
+    // Header
+    + '<tr><td style="background:#0A0A0A;padding:28px 40px;text-align:center;">'
+    + '<p style="margin:0;font-family:Georgia,serif;font-size:26px;color:#ffffff;letter-spacing:0.5px;">Sunday Sites.</p>'
+    + '</td></tr>'
+
+    // Badge + name
+    + '<tr><td style="padding:28px 40px 0;">'
+    + '<table cellpadding="0" cellspacing="0"><tr>'
+    + '<td style="background:#800020;color:#ffffff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;">NEW ONBOARDING</td>'
+    + '</tr></table>'
+    + '<p style="margin:16px 0 4px;font-size:22px;font-weight:700;color:#0A0A0A;">' + escapeHtml(data.name || 'Unknown') + '</p>'
+    + '<p style="margin:0;font-size:14px;color:#6B6B6B;">' + escapeHtml(data.email || '') + '</p>'
+    + '</td></tr>'
+
+    // Divider
+    + '<tr><td style="padding:20px 40px 0;"><div style="border-top:1px solid #E5E5E5;"></div></td></tr>'
+
+    // Data table
+    + '<tr><td style="padding:20px 40px 0;">'
+    + '<table width="100%" cellpadding="0" cellspacing="0">'
+
+    + row('Cell', data.cell)
+    + row('License / Brokerage', data.licenseOrBrokerage)
+    + row('Service Areas', data.areas)
+    + row('Specialty', data.specialty)
+    + row('Voice', data.voice)
+
+    + '<tr><td colspan="2" style="padding:12px 0 4px;"><div style="border-top:1px solid #F0F0F0;"></div></td></tr>'
+
+    + row('Has Domain?', data.hasDomain)
+    + row('Domain URL', data.domainUrl)
+    + row('Has Brand?', data.hasBrand)
+    + linkRow('Brand Drive Link', data.brandDriveLink)
+    + row('Fav Sites', data.favSites)
+    + row('Mood Word', data.moodWord)
+    + linkRow('Headshot Drive Link', data.headshotLink)
+
+    + '<tr><td colspan="2" style="padding:12px 0 4px;"><div style="border-top:1px solid #F0F0F0;"></div></td></tr>'
+
+    + row('Languages', data.languages)
+    + row('Avoid Note', data.avoidNote)
+
+    + (data.utm_source || data.utm_campaign ? buildUtmRow(data) : '')
+    + row('Submitted', timestamp)
+
+    + '</table>'
+    + '</td></tr>'
+
+    // CTA
+    + '<tr><td style="padding:24px 40px 32px;">'
+    + '<a href="mailto:' + escapeHtml(data.email || '') + '?subject=' + encodeURIComponent('Your Sunday Sites mockup — ' + (data.name || '').split(' ')[0]) + '" '
+    + 'style="display:inline-block;background:#0A0A0A;color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;">Reply to ' + escapeHtml((data.name || 'Lead').split(' ')[0]) + '</a>'
+    + '</td></tr>'
+
+    // Footer
+    + '<tr><td style="background:#f5f5f5;padding:20px 40px;text-align:center;">'
+    + '<p style="margin:0;font-size:12px;color:#6B6B6B;">sundayable.com &mdash; Sunday Sites</p>'
+    + '</td></tr>'
+
+    + '</table>'
+    + '</td></tr></table>'
+    + '</body></html>';
+}
+
+// ─── End Realtor Site Onboarding handlers ────────────────────────────────────
 
 /**
  * Test function — run manually in Apps Script editor to preview the email

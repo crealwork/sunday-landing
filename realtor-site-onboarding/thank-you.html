@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8FS4K4ZBZP"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-8FS4K4ZBZP');</script>
+  <!-- Meta Pixel Code -->
+  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1626241295320968');fbq('track','PageView');</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1626241295320968&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
+  <title>Got it — Sunday Sites</title>
+  <meta name="description" content="Thanks for submitting your onboarding form. We'll have your first design draft ready within 1-2 business days.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            paper: '#FFFFFF',
+            muted: '#6B6B6B',
+            divider: '#E5E5E5',
+            surface: '#F5F5F5',
+          },
+          fontFamily: {
+            heading: ['"Instrument Serif"', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    h1, h2, h3 { letter-spacing: -0.02em; }
+    ::selection { background: #0A0A0A; color: white; }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-paper text-ink font-body min-h-screen antialiased">
+
+  <div class="text-center px-6 py-20 max-w-md mx-auto fade-in">
+
+    <!-- Check mark -->
+    <div class="w-16 h-16 bg-ink rounded-full flex items-center justify-center mx-auto mb-8">
+      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+    </div>
+
+    <h1 class="font-heading text-4xl md:text-5xl mb-4">Got it. Let's get to work.</h1>
+    <p class="text-muted text-base leading-relaxed mb-10">
+      Thanks for sharing the details. We'll review and have a first design draft in your inbox within 1&ndash;2 business days. If we need anything else — a higher-res headshot, domain access details — we'll reach out at the email you provided.
+    </p>
+
+    <!-- What happens next -->
+    <div class="bg-surface border border-divider rounded-2xl p-6 mb-10 text-left">
+      <p class="font-semibold text-sm mb-4">What happens next</p>
+      <div class="space-y-4 text-muted">
+        <div class="flex gap-3">
+          <span class="text-ink font-bold flex-shrink-0">1.</span>
+          <p>We review your submission and pull together a first design direction.</p>
+        </div>
+        <div class="flex gap-3">
+          <span class="text-ink font-bold flex-shrink-0">2.</span>
+          <p>You'll get a mockup in your inbox within 1&ndash;2 business days.</p>
+        </div>
+        <div class="flex gap-3">
+          <span class="text-ink font-bold flex-shrink-0">3.</span>
+          <p>We go back and forth until it's right, then ship it.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="/" class="inline-block text-muted/50 hover:text-ink transition text-sm">&larr; Back to homepage</a>
+  </div>
+
+</body>
+</html>

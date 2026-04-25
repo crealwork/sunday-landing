@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8FS4K4ZBZP"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-8FS4K4ZBZP');</script>
+  <!-- Meta Pixel Code -->
+  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1626241295320968');fbq('track','PageView');</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1626241295320968&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
+  <title>Sunday Sites — Realtor onboarding | Build a site that fits you</title>
+  <meta name="description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days. Designed by Sunday for BC realtors.">
+  <link rel="canonical" href="https://www.sundayable.com/realtor-site-onboarding/">
+  <meta property="og:title" content="Sunday Sites — Realtor onboarding">
+  <meta property="og:description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days.">
+  <meta property="og:image" content="https://www.sundayable.com/og-image.png">
+  <meta property="og:url" content="https://www.sundayable.com/realtor-site-onboarding/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sunday">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sunday Sites — Realtor onboarding">
+  <meta name="twitter:description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days.">
+  <meta name="twitter:image" content="https://www.sundayable.com/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            paper: '#FFFFFF',
+            muted: '#6B6B6B',
+            divider: '#E5E5E5',
+            surface: '#F5F5F5',
+            hover: '#F0F0F0',
+            accent: '#800020',
+          },
+          fontFamily: {
+            heading: ['"Instrument Serif"', 'Georgia', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    h1, h2, h3 { letter-spacing: 0.015em; }
+    ::selection { background: #0A0A0A; color: white; }
+
+    .fade-in { animation: fadeIn 0.5s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* Conditional reveal */
+    .conditional-reveal {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      margin-top: 0;
+    }
+    .conditional-reveal.open {
+      max-height: 600px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    /* Chip group */
+    .chip-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .chip input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .chip label {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border: 1px solid #E5E5E5;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6B6B6B;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+    }
+    .chip input[type="radio"]:checked + label {
+      background: #0A0A0A;
+      color: #FFFFFF;
+      border-color: #0A0A0A;
+    }
+    .chip label:hover { background: #F0F0F0; border-color: #0A0A0A; color: #0A0A0A; }
+    .chip input[type="radio"]:checked + label:hover { background: #0A0A0A; color: #FFFFFF; }
+
+    /* Checkbox style */
+    .check-item { display: flex; align-items: flex-start; gap: 0.625rem; margin-bottom: 0.5rem; }
+    .check-item input[type="checkbox"] {
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #E5E5E5;
+      border-radius: 4px;
+      flex-shrink: 0;
+      accent-color: #0A0A0A;
+      cursor: pointer;
+    }
+    .check-item label { font-size: 0.9375rem; color: #0A0A0A; cursor: pointer; line-height: 1.4; }
+
+    /* Input base */
+    .field-input {
+      width: 100%;
+      border: 1px solid #E5E5E5;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 0.9375rem;
+      color: #0A0A0A;
+      background: #FFFFFF;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .field-input:focus { border-color: #0A0A0A; }
+    .field-input::placeholder { color: #A0A0A0; }
+
+    textarea.field-input { resize: vertical; min-height: 96px; }
+
+    /* Radio group */
+    .radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .radio-item { display: flex; align-items: center; gap: 0.625rem; }
+    .radio-item input[type="radio"] {
+      width: 16px; height: 16px;
+      accent-color: #0A0A0A;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .radio-item label { font-size: 0.9375rem; color: #0A0A0A; cursor: pointer; }
+
+    /* Progress bar */
+    .progress-track { width: 100%; height: 3px; background: #E5E5E5; border-radius: 9999px; }
+    .progress-fill { height: 3px; background: #0A0A0A; border-radius: 9999px; transition: width 0.4s ease; }
+
+    /* Error state */
+    .field-error { border-color: #800020 !important; }
+    .error-msg { color: #800020; font-size: 0.8125rem; margin-top: 0.35rem; display: none; }
+    .error-msg.visible { display: block; }
+
+    /* Step fade transition */
+    .step-enter { animation: stepIn 0.4s ease both; }
+    @keyframes stepIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    .step-exit { animation: stepOut 0.2s ease both; }
+    @keyframes stepOut { from { opacity: 1; } to { opacity: 0; } }
+  </style>
+</head>
+<body class="bg-surface text-ink font-body antialiased">
+
+  <!-- Header bar -->
+  <header class="bg-paper border-b border-divider">
+    <div class="max-w-xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-heading text-xl text-ink">Sunday.</a>
+      <span class="text-muted text-sm">Sunday Sites</span>
+    </div>
+  </header>
+
+  <main class="max-w-xl mx-auto px-6 py-12">
+
+    <!-- Hero -->
+    <div class="mb-10 fade-in">
+      <p class="text-muted text-xs font-semibold tracking-widest uppercase mb-3">Sunday Sites &middot; Realtor onboarding</p>
+      <h1 class="font-heading text-5xl sm:text-6xl leading-tight mb-4">Let's build your site.</h1>
+      <p class="text-muted text-base leading-relaxed">Five short steps. About 8 minutes. We'll have a first design in your inbox within 1&ndash;2 business days.</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="mb-8 fade-in" style="animation-delay:0.1s">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold text-muted uppercase tracking-widest" id="stepLabel">Step 1 of 5</span>
+        <span class="text-xs text-muted" id="stepName">About you</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:20%"></div>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="bg-paper rounded-2xl border border-divider shadow-sm p-6 sm:p-8 fade-in" style="animation-delay:0.15s">
+      <form id="onboardingForm" novalidate>
+
+        <!-- ===== STEP 1: About you ===== -->
+        <div class="step active" id="step1">
+          <h2 class="text-lg font-semibold mb-6">About you</h2>
+
+          <div class="space-y-5">
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="fullName">Full name <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-2">As it should appear on your site, including REALTOR<sup>&reg;</sup> designation if you use it.</p>
+              <input type="text" id="fullName" name="fullName" class="field-input" placeholder="Jane Kim, REALTOR®" required autocomplete="name">
+              <p class="error-msg" id="err-fullName">Please enter your full name.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="email">Email <span class="text-accent">*</span></label>
+              <input type="email" id="email" name="email" class="field-input" placeholder="jane@example.com" required autocomplete="email">
+              <p class="error-msg" id="err-email">Please enter a valid email address.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="cell">Cell phone <span class="text-accent">*</span></label>
+              <input type="tel" id="cell" name="cell" class="field-input" placeholder="604-555-0123" required autocomplete="tel">
+              <p class="error-msg" id="err-cell">Please enter your cell number.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="licenseOrBrokerage">License # or brokerage name + city <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-2">BCFSA license number, or your brokerage name and city if you don't have it handy.</p>
+              <input type="text" id="licenseOrBrokerage" name="licenseOrBrokerage" class="field-input" placeholder="e.g. RE3456789 — or — Haven Real Estate, Vancouver" required>
+              <p class="error-msg" id="err-licenseOrBrokerage">Please enter your license number or brokerage.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Service areas <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-3">Check all that apply.</p>
+              <div id="areasCheckboxes">
+                <div class="check-item"><input type="checkbox" id="area-vw" name="areas" value="Vancouver West"><label for="area-vw">Vancouver West</label></div>
+                <div class="check-item"><input type="checkbox" id="area-ve" name="areas" value="Vancouver East"><label for="area-ve">Vancouver East</label></div>
+                <div class="check-item"><input type="checkbox" id="area-bb" name="areas" value="Burnaby (Brentwood/Metrotown)"><label for="area-bb">Burnaby (Brentwood/Metrotown)</label></div>
+                <div class="check-item"><input type="checkbox" id="area-bo" name="areas" value="Burnaby (other)"><label for="area-bo">Burnaby (other)</label></div>
+                <div class="check-item"><input type="checkbox" id="area-ri" name="areas" value="Richmond"><label for="area-ri">Richmond</label></div>
+                <div class="check-item"><input type="checkbox" id="area-cq" name="areas" value="Coquitlam / Tri-Cities"><label for="area-cq">Coquitlam / Tri-Cities</label></div>
+                <div class="check-item"><input type="checkbox" id="area-nw" name="areas" value="North / West Vancouver"><label for="area-nw">North / West Vancouver</label></div>
+                <div class="check-item"><input type="checkbox" id="area-nm" name="areas" value="New Westminster"><label for="area-nm">New Westminster</label></div>
+                <div class="check-item"><input type="checkbox" id="area-su" name="areas" value="Surrey"><label for="area-su">Surrey</label></div>
+                <div class="check-item"><input type="checkbox" id="area-wr" name="areas" value="White Rock"><label for="area-wr">White Rock</label></div>
+                <div class="check-item"><input type="checkbox" id="area-other-check" name="areas" value="Other"><label for="area-other-check">Other</label></div>
+              </div>
+              <div class="conditional-reveal" id="otherAreaReveal">
+                <input type="text" id="otherAreaText" name="otherAreaText" class="field-input mt-1" placeholder="Which area(s)?">
+              </div>
+              <p class="error-msg" id="err-areas">Please select at least one service area.</p>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex justify-end">
+            <button type="button" class="btn-continue bg-ink text-white font-semibold px-7 py-3 rounded-full hover:bg-ink/80 transition text-sm" data-next="2">Continue &rarr;</button>
+          </div>
+        </div>
+
+        <!-- ===== STEP 2: Your work ===== -->
+        <div class="step" id="step2">
+          <h2 class="text-lg font-semibold mb-6">Your work</h2>
+
+          <div class="space-y-6">
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Specialty <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-3">Check all that apply.</p>
+              <div id="specialtyCheckboxes">
+                <div class="check-item"><input type="checkbox" id="sp-presale" name="specialty" value="Presale"><label for="sp-presale">Presale</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-resale-condo" name="specialty" value="Resale condo / townhome"><label for="sp-resale-condo">Resale condo / townhome</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-resale-det" name="specialty" value="Resale detached"><label for="sp-resale-det">Resale detached</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-luxury" name="specialty" value="Luxury"><label for="sp-luxury">Luxury</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-ftb" name="specialty" value="First-time buyers"><label for="sp-ftb">First-time buyers</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-invest" name="specialty" value="Investment property"><label for="sp-invest">Investment property</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-commercial" name="specialty" value="Commercial"><label for="sp-commercial">Commercial</label></div>
+                <div class="check-item"><input type="checkbox" id="sp-preconstruct" name="specialty" value="Pre-construction assignment"><label for="sp-preconstruct">Pre-construction assignment</label></div>
+              </div>
+              <p class="error-msg" id="err-specialty">Please select at least one specialty.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="voice">In your own words <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-2">Tell us in 1&ndash;3 sentences: why real estate, or where did you work before? Used as raw material for your About copy — be casual, your own words.</p>
+              <textarea id="voice" name="voice" class="field-input" placeholder="e.g. I was a mortgage broker for 8 years before getting my license. I switched because I wanted to work with buyers directly — I love the moment they walk into the right place." required></textarea>
+              <p class="error-msg" id="err-voice">Please write a sentence or two about yourself.</p>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex items-center justify-between">
+            <button type="button" class="btn-back text-muted hover:text-ink text-sm transition" data-prev="1">&larr; Back</button>
+            <button type="button" class="btn-continue bg-ink text-white font-semibold px-7 py-3 rounded-full hover:bg-ink/80 transition text-sm" data-next="3">Continue &rarr;</button>
+          </div>
+        </div>
+
+        <!-- ===== STEP 3: Domain ===== -->
+        <div class="step" id="step3">
+          <h2 class="text-lg font-semibold mb-6">Domain</h2>
+
+          <div class="space-y-5">
+
+            <div>
+              <label class="block text-sm font-medium mb-3">Do you have a domain already? <span class="text-accent">*</span></label>
+              <div class="radio-group" id="hasDomainGroup">
+                <div class="radio-item"><input type="radio" id="domain-yes" name="hasDomain" value="Yes"><label for="domain-yes">Yes</label></div>
+                <div class="radio-item"><input type="radio" id="domain-no" name="hasDomain" value="No"><label for="domain-no">No</label></div>
+                <div class="radio-item"><input type="radio" id="domain-help" name="hasDomain" value="I want help getting one"><label for="domain-help">I want help getting one</label></div>
+              </div>
+              <p class="error-msg" id="err-hasDomain">Please select an option.</p>
+
+              <!-- Conditional: domain URL -->
+              <div class="conditional-reveal" id="domainUrlReveal">
+                <label class="block text-sm font-medium mb-1.5 mt-4" for="domainUrl">Your domain URL</label>
+                <input type="text" id="domainUrl" name="domainUrl" class="field-input" placeholder="e.g. janekimhomes.ca">
+                <p class="text-xs text-muted mt-2">We'll email you with the access details we'll need.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex items-center justify-between">
+            <button type="button" class="btn-back text-muted hover:text-ink text-sm transition" data-prev="2">&larr; Back</button>
+            <button type="button" class="btn-continue bg-ink text-white font-semibold px-7 py-3 rounded-full hover:bg-ink/80 transition text-sm" data-next="4">Continue &rarr;</button>
+          </div>
+        </div>
+
+        <!-- ===== STEP 4: Brand & assets ===== -->
+        <div class="step" id="step4">
+          <h2 class="text-lg font-semibold mb-6">Brand &amp; assets</h2>
+
+          <div class="space-y-7">
+
+            <!-- Brand guidelines radio -->
+            <div>
+              <label class="block text-sm font-medium mb-3">Do you already have brand guidelines or a logo? <span class="text-accent">*</span></label>
+              <div class="radio-group" id="hasBrandGroup">
+                <div class="radio-item"><input type="radio" id="brand-yes" name="hasBrand" value="Yes"><label for="brand-yes">Yes</label></div>
+                <div class="radio-item"><input type="radio" id="brand-no" name="hasBrand" value="No"><label for="brand-no">No</label></div>
+              </div>
+              <p class="error-msg" id="err-hasBrand">Please select an option.</p>
+
+              <!-- If Yes: Drive link -->
+              <div class="conditional-reveal" id="brandDriveReveal">
+                <label class="block text-sm font-medium mb-1.5 mt-4" for="brandDriveLink">Google Drive share link</label>
+                <input type="url" id="brandDriveLink" name="brandDriveLink" class="field-input" placeholder="https://drive.google.com/drive/folders/…">
+                <p class="text-xs text-muted mt-2">Set the link to "Anyone with the link can view." Include logo files, brand guidelines PDF, and any color/typography references.</p>
+              </div>
+
+              <!-- If No: fav sites + mood word -->
+              <div class="conditional-reveal" id="favSitesReveal">
+
+                <div class="mt-4 space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-1.5">Send 2&ndash;3 websites you find beautiful</label>
+                    <p class="text-xs text-muted mb-3">Any industry — hotels, magazines, restaurants, art galleries, fashion all welcome. Try to avoid other realtor sites.</p>
+                    <div class="space-y-2">
+                      <input type="url" id="favSite1" name="favSite1" class="field-input" placeholder="https://…">
+                      <input type="url" id="favSite2" name="favSite2" class="field-input" placeholder="https://…">
+                      <input type="url" id="favSite3" name="favSite3" class="field-input" placeholder="https://… (optional)">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Pick a mood word that describes how you want clients to feel on your site</label>
+                    <div class="chip-group" id="moodChips">
+                      <span class="chip"><input type="radio" id="mood-warm" name="moodWord" value="Warm"><label for="mood-warm">Warm</label></span>
+                      <span class="chip"><input type="radio" id="mood-refined" name="moodWord" value="Refined"><label for="mood-refined">Refined</label></span>
+                      <span class="chip"><input type="radio" id="mood-bold" name="moodWord" value="Bold"><label for="mood-bold">Bold</label></span>
+                      <span class="chip"><input type="radio" id="mood-minimal" name="moodWord" value="Minimal"><label for="mood-minimal">Minimal</label></span>
+                      <span class="chip"><input type="radio" id="mood-editorial" name="moodWord" value="Editorial"><label for="mood-editorial">Editorial</label></span>
+                      <span class="chip"><input type="radio" id="mood-classic" name="moodWord" value="Classic"><label for="mood-classic">Classic</label></span>
+                      <span class="chip"><input type="radio" id="mood-luxe" name="moodWord" value="Luxe"><label for="mood-luxe">Luxe</label></span>
+                      <span class="chip"><input type="radio" id="mood-playful" name="moodWord" value="Playful"><label for="mood-playful">Playful</label></span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Headshot -->
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="headshotLink">Headshot — Google Drive share link <span class="text-accent">*</span></label>
+              <input type="url" id="headshotLink" name="headshotLink" class="field-input" placeholder="https://drive.google.com/file/d/…">
+              <p class="text-xs text-muted mt-2">Set to "Anyone with the link can view." Best resolution you have — even a phone shot works.</p>
+              <p class="error-msg" id="err-headshotLink">Please add a Google Drive link to your headshot.</p>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex items-center justify-between">
+            <button type="button" class="btn-back text-muted hover:text-ink text-sm transition" data-prev="3">&larr; Back</button>
+            <button type="button" class="btn-continue bg-ink text-white font-semibold px-7 py-3 rounded-full hover:bg-ink/80 transition text-sm" data-next="5">Continue &rarr;</button>
+          </div>
+        </div>
+
+        <!-- ===== STEP 5: Optional ===== -->
+        <div class="step" id="step5">
+          <h2 class="text-lg font-semibold mb-1">A couple of extras</h2>
+          <p class="text-muted text-sm mb-6">Both optional — skip if you'd rather just submit.</p>
+
+          <div class="space-y-6">
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Languages spoken with clients</label>
+              <div id="languageCheckboxes">
+                <div class="check-item"><input type="checkbox" id="lang-en" name="languages" value="English"><label for="lang-en">English</label></div>
+                <div class="check-item"><input type="checkbox" id="lang-ko" name="languages" value="Korean (한국어)"><label for="lang-ko">Korean (한국어)</label></div>
+                <div class="check-item"><input type="checkbox" id="lang-zh" name="languages" value="Mandarin (中文)"><label for="lang-zh">Mandarin (中文)</label></div>
+                <div class="check-item"><input type="checkbox" id="lang-yue" name="languages" value="Cantonese (廣東話)"><label for="lang-yue">Cantonese (廣東話)</label></div>
+                <div class="check-item"><input type="checkbox" id="lang-fa" name="languages" value="Farsi (فارسی)"><label for="lang-fa">Farsi (فارسی)</label></div>
+                <div class="check-item"><input type="checkbox" id="lang-other" name="languages" value="Other"><label for="lang-other">Other</label></div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="avoidNote">Anything to avoid</label>
+              <input type="text" id="avoidNote" name="avoidNote" class="field-input" placeholder="e.g. 'I don't want green — my old broker used green.' Optional.">
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex items-center justify-between gap-3">
+            <button type="button" class="btn-back text-muted hover:text-ink text-sm transition" data-prev="4">&larr; Back</button>
+            <div class="flex items-center gap-3">
+              <button type="button" id="skipSubmitBtn" class="text-muted hover:text-ink text-sm border border-divider px-5 py-3 rounded-full transition">Skip and submit</button>
+              <button type="submit" id="submitBtn" class="bg-ink text-white font-semibold px-7 py-3 rounded-full hover:bg-ink/80 transition text-sm">Submit</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Submitting state -->
+      <div id="submittingState" class="hidden text-center py-8">
+        <div class="inline-block w-7 h-7 border-2 border-ink border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-muted text-sm">Sending your details…</p>
+      </div>
+
+    </div><!-- /card -->
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-xl mx-auto px-6 py-10 text-center">
+    <p class="text-muted text-sm">
+      Questions? Email <a href="mailto:onboarding@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">onboarding@sundayable.com</a>
+      or text <!-- TODO: replace with onboarding contact number -->
+      <a href="tel:778-XXX-XXXX" class="text-ink underline underline-offset-2 hover:text-accent transition">778-XXX-XXXX</a>.
+    </p>
+  </footer>
+
+  <script>
+  // ─── UTM capture (first-touch, session-scoped) ────────────────────────────
+  (function captureUtms() {
+    var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var params = new URLSearchParams(window.location.search);
+    var hasUtm = utmKeys.some(function(k) { return params.has(k); });
+    if (!hasUtm) return;
+    var existing = {};
+    try { existing = JSON.parse(sessionStorage.getItem('sunday_utms') || '{}'); } catch (e) {}
+    if (existing.utm_source || existing.utm_campaign) return;
+    var utms = { landing_url: window.location.href, landing_referrer: document.referrer || '' };
+    utmKeys.forEach(function(k) { if (params.has(k)) utms[k] = params.get(k); });
+    sessionStorage.setItem('sunday_utms', JSON.stringify(utms));
+  })();
+
+  // ─── Step navigation state ────────────────────────────────────────────────
+  var currentStep = 1;
+  var TOTAL_STEPS = 5;
+
+  var stepNames = {
+    1: 'About you',
+    2: 'Your work',
+    3: 'Domain',
+    4: 'Brand & assets',
+    5: 'Optional'
+  };
+
+  function setStep(n) {
+    var prev = document.getElementById('step' + currentStep);
+    prev.classList.remove('active');
+    currentStep = n;
+    var next = document.getElementById('step' + currentStep);
+    next.classList.add('active', 'step-enter');
+    setTimeout(function() { next.classList.remove('step-enter'); }, 450);
+
+    document.getElementById('stepLabel').textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
+    document.getElementById('stepName').textContent = stepNames[currentStep];
+    document.getElementById('progressFill').style.width = ((currentStep / TOTAL_STEPS) * 100) + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ─── Validation helpers ───────────────────────────────────────────────────
+  function showError(id, msg) {
+    var el = document.getElementById('err-' + id);
+    var input = document.getElementById(id);
+    if (el) { el.textContent = msg || el.textContent; el.classList.add('visible'); }
+    if (input) input.classList.add('field-error');
+  }
+  function clearError(id) {
+    var el = document.getElementById('err-' + id);
+    var input = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+    if (input) input.classList.remove('field-error');
+  }
+
+  function getCheckedValues(name) {
+    return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function(el) { return el.value; });
+  }
+
+  function validateStep(n) {
+    var valid = true;
+
+    if (n === 1) {
+      var name = document.getElementById('fullName').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var cell = document.getElementById('cell').value.trim();
+      var lic = document.getElementById('licenseOrBrokerage').value.trim();
+      var areas = getCheckedValues('areas');
+
+      if (!name) { showError('fullName'); valid = false; } else clearError('fullName');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email address.'); valid = false; } else clearError('email');
+      if (!cell) { showError('cell'); valid = false; } else clearError('cell');
+      if (!lic) { showError('licenseOrBrokerage'); valid = false; } else clearError('licenseOrBrokerage');
+      if (areas.length === 0) { showError('areas', 'Please select at least one service area.'); valid = false; } else clearError('areas');
+    }
+
+    if (n === 2) {
+      var specialty = getCheckedValues('specialty');
+      var voice = document.getElementById('voice').value.trim();
+      if (specialty.length === 0) { showError('specialty', 'Please select at least one specialty.'); valid = false; } else clearError('specialty');
+      if (!voice) { showError('voice'); valid = false; } else clearError('voice');
+    }
+
+    if (n === 3) {
+      var hasDomain = document.querySelector('input[name="hasDomain"]:checked');
+      if (!hasDomain) { showError('hasDomain', 'Please select an option.'); valid = false; } else clearError('hasDomain');
+    }
+
+    if (n === 4) {
+      var hasBrand = document.querySelector('input[name="hasBrand"]:checked');
+      var headshot = document.getElementById('headshotLink').value.trim();
+      if (!hasBrand) { showError('hasBrand', 'Please select an option.'); valid = false; } else clearError('hasBrand');
+      if (!headshot) { showError('headshotLink'); valid = false; } else clearError('headshotLink');
+    }
+
+    return valid;
+  }
+
+  // ─── Continue buttons ─────────────────────────────────────────────────────
+  document.querySelectorAll('.btn-continue').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var nextStep = parseInt(this.dataset.next);
+      if (validateStep(currentStep)) {
+        setStep(nextStep);
+      }
+    });
+  });
+
+  document.querySelectorAll('.btn-back').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setStep(parseInt(this.dataset.prev));
+    });
+  });
+
+  // ─── Conditional reveals ──────────────────────────────────────────────────
+
+  // Other area textarea
+  document.getElementById('area-other-check').addEventListener('change', function() {
+    document.getElementById('otherAreaReveal').classList.toggle('open', this.checked);
+  });
+
+  // Domain URL reveal
+  document.querySelectorAll('input[name="hasDomain"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.getElementById('domainUrlReveal').classList.toggle('open', this.value === 'Yes');
+    });
+  });
+
+  // Brand: Yes → Drive link, No → fav sites
+  document.querySelectorAll('input[name="hasBrand"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.getElementById('brandDriveReveal').classList.toggle('open', this.value === 'Yes');
+      document.getElementById('favSitesReveal').classList.toggle('open', this.value === 'No');
+    });
+  });
+
+  // ─── Skip and submit ──────────────────────────────────────────────────────
+  document.getElementById('skipSubmitBtn').addEventListener('click', function() {
+    submitForm();
+  });
+
+  // ─── Main form submit ─────────────────────────────────────────────────────
+  document.getElementById('onboardingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitForm();
+  });
+
+  function submitForm() {
+    var storedUtms = {};
+    try { storedUtms = JSON.parse(sessionStorage.getItem('sunday_utms') || '{}'); } catch (e) {}
+
+    var areas = getCheckedValues('areas');
+    var otherArea = document.getElementById('otherAreaText').value.trim();
+    if (otherArea && areas.indexOf('Other') !== -1) {
+      areas = areas.map(function(a) { return a === 'Other' ? 'Other: ' + otherArea : a; });
+    }
+
+    var hasBrand = document.querySelector('input[name="hasBrand"]:checked');
+    var favSites = [
+      document.getElementById('favSite1').value.trim(),
+      document.getElementById('favSite2').value.trim(),
+      document.getElementById('favSite3').value.trim()
+    ].filter(Boolean).join(', ');
+
+    var moodWord = document.querySelector('input[name="moodWord"]:checked');
+    var hasDomain = document.querySelector('input[name="hasDomain"]:checked');
+
+    var data = {
+      formType: 'realtor-site-onboarding',
+      timestamp: new Date().toISOString(),
+
+      name: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      cell: document.getElementById('cell').value.trim(),
+      licenseOrBrokerage: document.getElementById('licenseOrBrokerage').value.trim(),
+      areas: areas.join(', '),
+      specialty: getCheckedValues('specialty').join(', '),
+      voice: document.getElementById('voice').value.trim(),
+
+      hasDomain: hasDomain ? hasDomain.value : '',
+      domainUrl: document.getElementById('domainUrl').value.trim(),
+
+      hasBrand: hasBrand ? hasBrand.value : '',
+      brandDriveLink: document.getElementById('brandDriveLink').value.trim(),
+      favSites: favSites,
+      moodWord: moodWord ? moodWord.value : '',
+
+      headshotLink: document.getElementById('headshotLink').value.trim(),
+
+      languages: getCheckedValues('languages').join(', '),
+      avoidNote: document.getElementById('avoidNote').value.trim(),
+
+      utm_source: storedUtms.utm_source || '',
+      utm_medium: storedUtms.utm_medium || '',
+      utm_campaign: storedUtms.utm_campaign || '',
+      utm_content: storedUtms.utm_content || '',
+      utm_term: storedUtms.utm_term || '',
+      landing_url: storedUtms.landing_url || window.location.href,
+      landing_referrer: storedUtms.landing_referrer || document.referrer || ''
+    };
+
+    var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwri5L_GBnYDSL9kzfTkc19SGucpJy0WxRWrv_03g-1h5TpRhPuOd80mnuLMTv4Hdn7/exec';
+
+    // Show spinner
+    document.getElementById('onboardingForm').classList.add('hidden');
+    document.getElementById('submittingState').classList.remove('hidden');
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function() {
+      window.location.href = 'thank-you.html';
+    })
+    .catch(function() {
+      // no-cors always resolves — this fires only on network failure
+      window.location.href = 'thank-you.html';
+    });
+  }
+  </script>
+
+</body>
+</html>
