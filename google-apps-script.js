@@ -230,6 +230,84 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function slugify(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/[®*]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-(prec|realtor)(-|$)/g, '$2')
+    .substring(0, 40)
+    .replace(/-+$/, '');
+}
+
+/**
+ * Build a Claude-ready prompt + structured brief.
+ * Dan copy-pastes the entire thing into a fresh Claude session
+ * to kick off the realtor-site build.
+ */
+function buildClaudePromptForBuild(data) {
+  var slug = slugify(data.name) || 'new-realtor';
+  var hasBrandAssets = data.hasBrand === 'Yes';
+
+  var brand = hasBrandAssets
+    ? '- Existing brand assets: ' + (data.brandDriveLink || '(no link)')
+    : '- No existing brand\n- Mood word: ' + (data.moodWord || '—') + '\n- Reference sites: ' + (data.favSites || '—');
+
+  return [
+    "I'm building a new realtor website. Use the existing tooling:",
+    '',
+    '- Scaffold: `tools/realtor-site-starter/`',
+    '- Brainstorm skill (only if mood/hero direction unclear): `realtor-site-brainstorm`',
+    '- Playbook (gotchas — gpt-image-2, CSS, Vercel): `tools/realtor-site-starter/PLAYBOOK.md`',
+    '- Output dir: `clients/' + slug + '/website/`',
+    '- Reference site (proven pattern): `clients/chloe-choi/homesweetchloe/`',
+    '- Memory: `feedback_realtor_site_workflow.md`, `reference_gpt_image_2_quirks.md`, `project_homesweetchloe.md`',
+    '',
+    'Workflow:',
+    '1. Clone the starter to `clients/' + slug + '/website/`',
+    '2. Fill DESIGN.md from the brief below',
+    '3. Skip the brainstorm skill if the brief gives mood + reference sites; otherwise invoke briefly to settle missing decisions',
+    '4. Generate images via gpt-image-2 (~12 images, $2-3 budget)',
+    '5. Build pages, wire estimator + contact form, add SEO + JSON-LD',
+    '6. Deploy preview to Vercel (scope `dans-projects-a527926b`)',
+    '7. Reply with: preview URL, OpenAI cost, any decisions needed',
+    '',
+    'Target delivery: 2-4 hours from start.',
+    '',
+    '---',
+    '',
+    '# Realtor Site Brief — ' + (data.name || 'Unknown'),
+    '',
+    '## Identity',
+    '- Name (as displayed): ' + (data.name || ''),
+    '- License/Brokerage: ' + (data.licenseOrBrokerage || ''),
+    '- Cell: ' + (data.cell || ''),
+    '- Email: ' + (data.email || ''),
+    '- Service areas: ' + (data.areas || ''),
+    '- Social media: ' + (data.socialMedia || '—'),
+    '- Languages spoken with clients: ' + (data.languages || 'English only'),
+    '',
+    '## Specialty + Voice',
+    '- Specialty: ' + (data.specialty || ''),
+    '- Voice (raw material for About copy): ' + (data.voice || ''),
+    '',
+    '## Domain',
+    '- ' + (data.hasDomain || '—') + (data.domainUrl ? ' — ' + data.domainUrl : ''),
+    '',
+    '## Brand',
+    brand,
+    '',
+    '## Headshot',
+    '- ' + (data.headshotLink || '—'),
+    '',
+    '## Add-ons & content',
+    '- Presale projects to feature: ' + (data.presaleProjects || '—'),
+    '- Wants MLS/listings search: ' + (data.wantsListingsSearch || 'No'),
+    '- Avoid: ' + (data.avoidNote || '—'),
+  ].join('\n');
+}
+
 // ─── Realtor Site Onboarding handlers ────────────────────────────────────────
 
 /**
@@ -393,11 +471,24 @@ function buildOnboardingEmailHtml(data) {
     + '</td></tr>'
 
     // CTAs
-    + '<tr><td style="padding:24px 40px 32px;">'
+    + '<tr><td style="padding:24px 40px 12px;">'
     + '<a href="https://docs.google.com/spreadsheets/d/' + encodeURIComponent(getOnboardingSpreadsheetId()) + '/edit" '
     + 'style="display:inline-block;background:#0A0A0A;color:#ffffff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:6px;text-decoration:none;margin-right:8px;">Open Sheet &rarr;</a>'
     + '<a href="mailto:' + escapeHtml(data.email || '') + '?subject=' + encodeURIComponent('Your Sunday Sites mockup — ' + (data.name || '').split(' ')[0]) + '" '
     + 'style="display:inline-block;background:#ffffff;color:#0A0A0A;font-size:14px;font-weight:600;padding:11px 24px;border-radius:6px;text-decoration:none;border:1px solid #E5E5E5;">Reply to ' + escapeHtml((data.name || 'Lead').split(' ')[0]) + '</a>'
+    + '</td></tr>'
+
+    // Claude-ready brief (paste-into-Claude block)
+    + '<tr><td style="padding:8px 40px 32px;">'
+    + '<div style="border-top:1px solid #E5E5E5;padding-top:24px;">'
+    + '<p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#6B6B6B;">'
+    + '<span style="background:#C9A95C;color:#0A0A0A;padding:2px 8px;border-radius:4px;margin-right:6px;">CLAUDE</span>'
+    + 'Paste this in a fresh chat to start the build</p>'
+    + '<p style="margin:0 0 12px;font-size:12px;color:#6B6B6B;line-height:1.4;">Triple-click any line, Cmd/Ctrl-A inside the box, then copy. Drop into a new Claude Code session — that\'s it.</p>'
+    + '<pre style="font-family:\'SF Mono\',\'Monaco\',\'Menlo\',Consolas,monospace;font-size:12px;line-height:1.55;color:#0A0A0A;background:#FAFAFA;border:1px solid #E5E5E5;border-radius:6px;padding:16px;margin:0;white-space:pre-wrap;word-break:break-word;overflow-x:auto;">'
+    + escapeHtml(buildClaudePromptForBuild(data))
+    + '</pre>'
+    + '</div>'
     + '</td></tr>'
 
     // Footer
