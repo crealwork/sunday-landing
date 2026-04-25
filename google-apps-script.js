@@ -26,7 +26,8 @@ var COLUMNS = [
 ];
 
 var ONBOARDING_COLUMNS = [
-  'Timestamp', 'Name', 'Email', 'Cell', 'License or Brokerage', 'Areas', 'Specialty', 'Voice',
+  'Timestamp', 'Name', 'Email', 'Cell', 'License or Brokerage', 'Areas', 'Social Media',
+  'Specialty', 'Voice', 'Presale Projects', 'Wants Listings Search',
   'Has Domain', 'Domain URL', 'Has Brand', 'Brand Drive Link', 'Fav Sites', 'Mood Word',
   'Headshot Drive Link', 'Languages', 'Avoid Note',
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
@@ -265,8 +266,11 @@ function saveOnboardingToSheet(data) {
     data.cell || '',
     data.licenseOrBrokerage || '',
     data.areas || '',
+    data.socialMedia || '',
     data.specialty || '',
     data.voice || '',
+    data.presaleProjects || '',
+    data.wantsListingsSearch || '',
     data.hasDomain || '',
     data.domainUrl || '',
     data.hasBrand || '',
@@ -361,8 +365,11 @@ function buildOnboardingEmailHtml(data) {
     + row('Cell', data.cell)
     + row('License / Brokerage', data.licenseOrBrokerage)
     + row('Service Areas', data.areas)
+    + row('Social Media', data.socialMedia)
     + row('Specialty', data.specialty)
     + row('Voice', data.voice)
+    + row('Presale Projects', data.presaleProjects)
+    + row('Wants Listings Search', data.wantsListingsSearch)
 
     + '<tr><td colspan="2" style="padding:12px 0 4px;"><div style="border-top:1px solid #F0F0F0;"></div></td></tr>'
 

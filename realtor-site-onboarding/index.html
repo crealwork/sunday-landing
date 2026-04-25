@@ -229,6 +229,12 @@
               <p class="error-msg" id="err-areas">Please tell us your service areas.</p>
             </div>
 
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="socialMedia">Social media</label>
+              <p class="text-xs text-muted mb-2">Handles or full URLs across platforms — Instagram, Facebook, YouTube, TikTok, KakaoTalk, etc. Whatever you actively use.</p>
+              <textarea id="socialMedia" name="socialMedia" rows="2" class="field-input resize-y" placeholder="e.g. @home.sweet.chloe (IG), facebook.com/janekimrealtor, @janekim on TikTok"></textarea>
+            </div>
+
           </div>
 
           <div class="mt-8 flex justify-end">
@@ -263,6 +269,21 @@
               <p class="text-xs text-muted mb-2">1&ndash;3 sentences is good. Be casual — your own words become raw material for your About copy.</p>
               <textarea id="voice" name="voice" class="field-input" placeholder="e.g. I was a mortgage broker for 8 years before getting my license. I switched because I wanted to work with buyers directly — I love the moment they walk into the right place." required></textarea>
               <p class="error-msg" id="err-voice">Please write a sentence or two about yourself.</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5" for="presaleProjects">Presale projects to feature</label>
+              <p class="text-xs text-muted mb-2">List any presale projects you'd like included on your website. Optional — leave blank if none yet.</p>
+              <textarea id="presaleProjects" name="presaleProjects" rows="2" class="field-input resize-y" placeholder="e.g. Brentwood Tower 02, The Amazing on West 41st, Oakridge Park Phase 1"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-2">Listings &amp; MLS search on your website</label>
+              <p class="text-xs text-muted mb-3">Add a live listings catalogue + MLS search experience so visitors can browse + filter properties directly on your site. <strong>Has an additional monthly cost</strong> for the IDX feed and integration. Click below if interested — we'll send pricing details with your first design.</p>
+              <div class="check-item">
+                <input type="checkbox" id="wantsListingsSearch" name="wantsListingsSearch" value="Yes">
+                <label for="wantsListingsSearch">Yes, I'm interested in listings &amp; MLS search</label>
+              </div>
             </div>
 
           </div>
@@ -588,8 +609,11 @@
       cell: document.getElementById('cell').value.trim(),
       licenseOrBrokerage: document.getElementById('licenseOrBrokerage').value.trim(),
       areas: document.getElementById('areas').value.trim(),
+      socialMedia: document.getElementById('socialMedia').value.trim(),
       specialty: getCheckedValues('specialty').join(', '),
       voice: document.getElementById('voice').value.trim(),
+      presaleProjects: document.getElementById('presaleProjects').value.trim(),
+      wantsListingsSearch: document.getElementById('wantsListingsSearch').checked ? 'Yes' : 'No',
 
       hasDomain: hasDomain ? hasDomain.value : '',
       domainUrl: document.getElementById('domainUrl').value.trim(),
