@@ -92,7 +92,7 @@ function saveToSheet(data) {
 }
 
 function sendNotification(data) {
-  var subject = 'New Sunday Waitlist Signup — ' + (data.name || 'Unknown');
+  var subject = '🟣 Sunday waitlist — ' + (data.name || 'Unknown');
 
   var html = buildEmailHtml(data);
 
@@ -231,8 +231,33 @@ function escapeHtml(str) {
 
 // ─── Realtor Site Onboarding handlers ────────────────────────────────────────
 
+/**
+ * Onboarding spreadsheet is SEPARATE from the waitlist spreadsheet.
+ * On first submit, auto-create "Sunday Sites — Realtor Onboarding" in the
+ * script owner's Drive and remember its ID via PropertiesService. Dan can
+ * find it by name in Drive after the first submission and bookmark it.
+ */
+function getOrCreateOnboardingSpreadsheetId() {
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty('ONBOARDING_SPREADSHEET_ID');
+  if (id) return id;
+
+  var ss = SpreadsheetApp.create('Sunday Sites — Realtor Onboarding');
+  var sheet = ss.getActiveSheet();
+  sheet.setName(ONBOARDING_SHEET_NAME);
+  sheet.appendRow(ONBOARDING_COLUMNS);
+  // Freeze header row + bold it for usability
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 1, 1, ONBOARDING_COLUMNS.length).setFontWeight('bold');
+
+  id = ss.getId();
+  props.setProperty('ONBOARDING_SPREADSHEET_ID', id);
+  return id;
+}
+
 function saveOnboardingToSheet(data) {
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var id = getOrCreateOnboardingSpreadsheetId();
+  var ss = SpreadsheetApp.openById(id);
   var sheet = ss.getSheetByName(ONBOARDING_SHEET_NAME);
 
   if (!sheet) {
@@ -275,7 +300,7 @@ function saveOnboardingToSheet(data) {
 }
 
 function sendOnboardingNotification(data) {
-  var subject = 'New realtor site onboarding: ' + (data.name || 'Unknown');
+  var subject = '🟡 Sunday Sites onboarding — ' + (data.name || 'Unknown');
   var html = buildOnboardingEmailHtml(data);
 
   NOTIFY_EMAILS.forEach(function(email) {
@@ -333,7 +358,7 @@ function buildOnboardingEmailHtml(data) {
     // Badge + name
     + '<tr><td style="padding:28px 40px 0;">'
     + '<table cellpadding="0" cellspacing="0"><tr>'
-    + '<td style="background:#800020;color:#ffffff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;">NEW ONBOARDING</td>'
+    + '<td style="background:#C9A95C;color:#0A0A0A;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;">SITE ONBOARDING</td>'
     + '</tr></table>'
     + '<p style="margin:16px 0 4px;font-size:22px;font-weight:700;color:#0A0A0A;">' + escapeHtml(data.name || 'Unknown') + '</p>'
     + '<p style="margin:0;font-size:14px;color:#6B6B6B;">' + escapeHtml(data.email || '') + '</p>'
