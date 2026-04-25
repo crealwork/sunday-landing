@@ -627,7 +627,7 @@
       });
     } catch (e) { /* swallow — submission continues in background even after navigation */ }
 
-    window.location.href = 'thank-you.html';
+    window.location.href = 'thank-you.html?n=' + encodeURIComponent(data.name || '');
     return;
 
     // Unreachable legacy fallback kept for diff clarity:
@@ -638,11 +638,11 @@
       body: JSON.stringify(data)
     })
     .then(function() {
-      window.location.href = 'thank-you.html';
+      window.location.href = 'thank-you.html?n=' + encodeURIComponent(data.name || '');
     })
     .catch(function() {
       // no-cors always resolves — this fires only on network failure
-      window.location.href = 'thank-you.html';
+      window.location.href = 'thank-you.html?n=' + encodeURIComponent(data.name || '');
     });
   }
   </script>

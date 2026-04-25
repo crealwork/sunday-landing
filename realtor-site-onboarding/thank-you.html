@@ -48,17 +48,24 @@
 
   <div class="text-center px-6 py-20 max-w-md mx-auto fade-in">
 
-    <!-- Check mark -->
+    <!-- Gold badge -->
+    <div class="inline-block mb-6">
+      <span style="background:#C9A95C;color:#0A0A0A;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;">SITE ONBOARDING</span>
+    </div>
+
+    <!-- Notebook + pen icon -->
     <div class="w-16 h-16 bg-ink rounded-full flex items-center justify-center mx-auto mb-8">
-      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-        <polyline points="22 4 12 14.01 9 11.01"/>
+      <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+        <path d="M2 2l7.586 7.586"/>
+        <circle cx="11" cy="11" r="2"/>
       </svg>
     </div>
 
-    <h1 class="font-heading text-4xl md:text-5xl mb-4">Got it. Let's get to work.</h1>
-    <p class="text-muted text-base leading-relaxed mb-10">
-      Thanks for sharing the details. We'll review and have a first design draft in your inbox within 1&ndash;2 business days. If we need anything else — a higher-res headshot, domain access details — we'll reach out at the email you provided.
+    <h1 class="font-heading text-4xl md:text-5xl mb-4" id="greeting">Got it. Let's get to work.</h1>
+    <p class="text-muted text-base leading-relaxed mb-10" id="subtitle">
+      Thanks for sharing the details. Your first design draft will land in your inbox within 1&ndash;2 business days. If we need anything else — a higher-res headshot, domain access — we'll reach out at the email you provided.
     </p>
 
     <!-- What happens next -->
@@ -71,17 +78,35 @@
         </div>
         <div class="flex gap-3">
           <span class="text-ink font-bold flex-shrink-0">2.</span>
-          <p>You'll get a mockup in your inbox within 1&ndash;2 business days.</p>
+          <p>You'll get a full mockup in your inbox within 1&ndash;2 business days.</p>
         </div>
         <div class="flex gap-3">
           <span class="text-ink font-bold flex-shrink-0">3.</span>
-          <p>We go back and forth until it's right, then ship it.</p>
+          <p>We iterate together until it's right, then ship it live.</p>
         </div>
       </div>
     </div>
 
     <a href="/" class="inline-block text-muted/50 hover:text-ink transition text-sm">&larr; Back to homepage</a>
   </div>
+
+  <script>
+    // Personalize greeting from ?n= query param
+    (function() {
+      var name = new URLSearchParams(window.location.search).get('n');
+      if (!name) return;
+      var first = name.trim().split(/\s+/)[0];
+      if (!first) return;
+      // Strip suffixes like "PREC*", "REALTOR®" etc.
+      first = first.replace(/[*,].*$/, '').trim();
+      if (!first) return;
+      var safe = first.replace(/[<>"']/g, '');
+      var g = document.getElementById('greeting');
+      var s = document.getElementById('subtitle');
+      if (g) g.textContent = 'Got it, ' + safe + '. Let\u2019s get to work.';
+      if (s) s.textContent = 'Thanks ' + safe + '. Your first design draft will land in your inbox within 1\u20132 business days. If we need anything else \u2014 a higher-res headshot, domain access \u2014 we\u2019ll reach out at the email you provided.';
+    })();
+  </script>
 
 </body>
 </html>
