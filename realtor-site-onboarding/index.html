@@ -271,8 +271,8 @@
               <p class="error-msg" id="err-voice">Please write a sentence or two about yourself.</p>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium mb-1.5" for="presaleProjects">Presale projects to feature</label>
+            <div class="conditional-reveal" id="presaleProjectsReveal">
+              <label class="block text-sm font-medium mb-1.5 mt-2" for="presaleProjects">Presale projects to feature</label>
               <p class="text-xs text-muted mb-2">List any presale projects you'd like included on your website. Optional — leave blank if none yet.</p>
               <textarea id="presaleProjects" name="presaleProjects" rows="2" class="field-input resize-y" placeholder="e.g. Brentwood Tower 02, The Amazing on West 41st, Oakridge Park Phase 1"></textarea>
             </div>
@@ -559,6 +559,17 @@
   });
 
   // ─── Conditional reveals ──────────────────────────────────────────────────
+
+  // Presale projects reveal — only when "Presale" or "Pre-construction assignment" specialty checked
+  function updatePresaleProjectsReveal() {
+    var presaleCb = document.querySelector('input[name="specialty"][value="Presale"]');
+    var preConstructCb = document.querySelector('input[name="specialty"][value="Pre-construction assignment"]');
+    var show = (presaleCb && presaleCb.checked) || (preConstructCb && preConstructCb.checked);
+    document.getElementById('presaleProjectsReveal').classList.toggle('open', show);
+  }
+  document.querySelectorAll('input[name="specialty"]').forEach(function(cb) {
+    cb.addEventListener('change', updatePresaleProjectsReveal);
+  });
 
   // Domain URL reveal
   document.querySelectorAll('input[name="hasDomain"]').forEach(function(radio) {
