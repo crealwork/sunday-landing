@@ -233,31 +233,18 @@ function escapeHtml(str) {
 
 /**
  * Onboarding spreadsheet is SEPARATE from the waitlist spreadsheet.
- * On first submit, auto-create "Sunday Sites — Realtor Onboarding" in the
- * script owner's Drive and remember its ID via PropertiesService. Dan can
- * find it by name in Drive after the first submission and bookmark it.
+ * Hardcoded to Dan's "Sunday Sites — Realtor Onboarding" sheet.
+ * Override via Script Properties → ONBOARDING_SPREADSHEET_ID if needed.
  */
-function getOrCreateOnboardingSpreadsheetId() {
-  var props = PropertiesService.getScriptProperties();
-  var id = props.getProperty('ONBOARDING_SPREADSHEET_ID');
-  if (id) return id;
+var ONBOARDING_SPREADSHEET_ID_DEFAULT = '10g0nrLKxFculS44RzsBz-jIXflwOWV7vYkN3BVRmH0M';
 
-  var ss = SpreadsheetApp.create('Sunday Sites — Realtor Onboarding');
-  var sheet = ss.getActiveSheet();
-  sheet.setName(ONBOARDING_SHEET_NAME);
-  sheet.appendRow(ONBOARDING_COLUMNS);
-  // Freeze header row + bold it for usability
-  sheet.setFrozenRows(1);
-  sheet.getRange(1, 1, 1, ONBOARDING_COLUMNS.length).setFontWeight('bold');
-
-  id = ss.getId();
-  props.setProperty('ONBOARDING_SPREADSHEET_ID', id);
-  return id;
+function getOnboardingSpreadsheetId() {
+  var override = PropertiesService.getScriptProperties().getProperty('ONBOARDING_SPREADSHEET_ID');
+  return override || ONBOARDING_SPREADSHEET_ID_DEFAULT;
 }
 
 function saveOnboardingToSheet(data) {
-  var id = getOrCreateOnboardingSpreadsheetId();
-  var ss = SpreadsheetApp.openById(id);
+  var ss = SpreadsheetApp.openById(getOnboardingSpreadsheetId());
   var sheet = ss.getSheetByName(ONBOARDING_SHEET_NAME);
 
   if (!sheet) {
