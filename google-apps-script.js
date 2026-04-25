@@ -26,7 +26,9 @@ var COLUMNS = [
 ];
 
 var ONBOARDING_COLUMNS = [
-  'Timestamp', 'Name', 'Email', 'Cell', 'License or Brokerage', 'Areas', 'Social Media',
+  'Timestamp', 'Name', 'Email', 'Cell',
+  'Brokerage Name', 'Brokerage Address', 'License Number',
+  'Areas', 'Social Media',
   'Specialty', 'Voice', 'Presale Projects', 'Wants Listings Search',
   'Has Domain', 'Domain URL', 'Has Brand', 'Brand Drive Link', 'Fav Sites', 'Mood Word',
   'Headshot Drive Link', 'Languages', 'Avoid Note',
@@ -281,7 +283,9 @@ function buildClaudePromptForBuild(data) {
     '',
     '## Identity',
     '- Name (as displayed): ' + (data.name || ''),
-    '- License/Brokerage: ' + (data.licenseOrBrokerage || ''),
+    '- Brokerage: ' + (data.brokerageName || ''),
+    '- Brokerage office address: ' + (data.brokerageAddress || ''),
+    '- BCFSA license #: ' + (data.licenseNumber || ''),
     '- Cell: ' + (data.cell || ''),
     '- Email: ' + (data.email || ''),
     '- Service areas: ' + (data.areas || ''),
@@ -342,7 +346,9 @@ function saveOnboardingToSheet(data) {
     data.name || '',
     data.email || '',
     data.cell || '',
-    data.licenseOrBrokerage || '',
+    data.brokerageName || '',
+    data.brokerageAddress || '',
+    data.licenseNumber || '',
     data.areas || '',
     data.socialMedia || '',
     data.specialty || '',
@@ -441,7 +447,9 @@ function buildOnboardingEmailHtml(data) {
     + '<table width="100%" cellpadding="0" cellspacing="0">'
 
     + row('Cell', data.cell)
-    + row('License / Brokerage', data.licenseOrBrokerage)
+    + row('Brokerage', data.brokerageName)
+    + row('Brokerage Address', data.brokerageAddress)
+    + row('License #', data.licenseNumber)
     + row('Service Areas', data.areas)
     + row('Social Media', data.socialMedia)
     + row('Specialty', data.specialty)
