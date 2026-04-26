@@ -11,7 +11,7 @@
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1626241295320968&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel Code -->
   <title>Sunday Sites — Realtor onboarding | Build a site that fits you</title>
-  <meta name="description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days. Designed by Sunday for BC realtors.">
+  <meta name="description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days. Designed by Sunday for realtors in BC, Alberta, and Ontario.">
   <link rel="canonical" href="https://www.sundayable.com/realtor-site-onboarding/">
   <meta property="og:title" content="Sunday Sites — Realtor onboarding">
   <meta property="og:description" content="Tell us about you in 8 minutes. We'll deliver a custom realtor site mockup within 1-2 business days.">
@@ -197,6 +197,17 @@
           <div class="space-y-5">
 
             <div>
+              <label class="block text-sm font-medium mb-2">Where are you licensed? <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-2">Pick your province so we use the right regulator + footer compliance details.</p>
+              <div class="chip-group" id="provinceChips">
+                <span class="chip"><input type="radio" id="prov-bc" name="province" value="BC"><label for="prov-bc">British Columbia</label></span>
+                <span class="chip"><input type="radio" id="prov-ab" name="province" value="AB"><label for="prov-ab">Alberta</label></span>
+                <span class="chip"><input type="radio" id="prov-on" name="province" value="ON"><label for="prov-on">Ontario</label></span>
+              </div>
+              <p class="error-msg" id="err-province">Please select your province.</p>
+            </div>
+
+            <div>
               <label class="block text-sm font-medium mb-1.5" for="fullName">Full name <span class="text-accent">*</span></label>
               <p class="text-xs text-muted mb-2">As it should appear on your site. Include PREC<sup>*</sup> if you have a Personal Real Estate Corporation, plus REALTOR<sup>&reg;</sup> designation if you use it.</p>
               <input type="text" id="fullName" name="fullName" class="field-input" placeholder="e.g. Jane Kim PREC*, REALTOR®" required autocomplete="name">
@@ -211,34 +222,34 @@
 
             <div>
               <label class="block text-sm font-medium mb-1.5" for="cell">Cell phone <span class="text-accent">*</span></label>
-              <input type="tel" id="cell" name="cell" class="field-input" placeholder="604-555-0123" required autocomplete="tel">
+              <input type="tel" id="cell" name="cell" class="field-input" placeholder="Your cell number" required autocomplete="tel">
               <p class="error-msg" id="err-cell">Please enter your cell number.</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium mb-1.5" for="brokerageName">Brokerage name <span class="text-accent">*</span></label>
-              <input type="text" id="brokerageName" name="brokerageName" class="field-input" placeholder="e.g. Westcoast Premier Realty" required>
+              <input type="text" id="brokerageName" name="brokerageName" class="field-input" placeholder="e.g. your brokerage name" required>
               <p class="error-msg" id="err-brokerageName">Please enter your brokerage name.</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium mb-1.5" for="brokerageAddress">Brokerage office address <span class="text-accent">*</span></label>
-              <p class="text-xs text-muted mb-2">Required for footer compliance (BCFSA).</p>
-              <input type="text" id="brokerageAddress" name="brokerageAddress" class="field-input" placeholder="e.g. 1000 Example Blvd, Vancouver, BC V6B 0A0" required>
+              <p class="text-xs text-muted mb-2" id="brokerageComplianceNote">Required for footer compliance.</p>
+              <input type="text" id="brokerageAddress" name="brokerageAddress" class="field-input" placeholder="e.g. 1000 Main St, City, Province, Postal Code" required>
               <p class="error-msg" id="err-brokerageAddress">Please enter your brokerage office address.</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1.5" for="licenseNumber">BCFSA license number <span class="text-accent">*</span></label>
+              <label class="block text-sm font-medium mb-1.5" for="licenseNumber"><span id="licenseLabelText">License/registration number</span> <span class="text-accent">*</span></label>
               <p class="text-xs text-muted mb-2">If you don't have it handy, type "TBD" and email it to <a href="mailto:hello@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">hello@sundayable.com</a> later.</p>
-              <input type="text" id="licenseNumber" name="licenseNumber" class="field-input" placeholder="e.g. RE123456" required>
-              <p class="error-msg" id="err-licenseNumber">Please enter your BCFSA license number.</p>
+              <input type="text" id="licenseNumber" name="licenseNumber" class="field-input" placeholder="Your license/registration number" required>
+              <p class="error-msg" id="err-licenseNumber">Please enter your license/registration number.</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium mb-1.5" for="areas">Service areas <span class="text-accent">*</span></label>
               <p class="text-xs text-muted mb-2">Where you actively work — neighborhoods, cities, or corridors.</p>
-              <textarea id="areas" name="areas" rows="2" class="field-input resize-y" required placeholder="e.g. Vancouver West, Burnaby Brentwood, Coquitlam, North Vancouver"></textarea>
+              <textarea id="areas" name="areas" rows="2" class="field-input resize-y" required placeholder="Where you actively work"></textarea>
               <p class="error-msg" id="err-areas">Please tell us your service areas.</p>
             </div>
 
@@ -312,7 +323,7 @@
                 <div class="mt-4 space-y-5">
                   <div>
                     <label class="block text-xs font-medium mb-1.5 text-muted">Testimonial 1 — client name</label>
-                    <input type="text" id="testimonial1Name" name="testimonial1Name" class="field-input mb-2" placeholder="e.g. Jamie L., Coquitlam">
+                    <input type="text" id="testimonial1Name" name="testimonial1Name" class="field-input mb-2" placeholder="e.g. Jamie L., your city">
                     <textarea id="testimonial1Text" name="testimonial1Text" rows="2" class="field-input resize-y" placeholder="What they said. Direct quote works best — copy-paste from the email or text they sent."></textarea>
                   </div>
                   <div>
@@ -501,6 +512,67 @@
     sessionStorage.setItem('sunday_utms', JSON.stringify(utms));
   })();
 
+  // ─── Province config (single source of truth) ─────────────────────────────
+  var PROVINCE_CONFIG = {
+    BC: {
+      regulator: 'BCFSA',
+      licenseLabel: 'BCFSA license number',
+      licensePlaceholder: 'e.g. RE123456',
+      licenseError: 'Please enter your BCFSA license number.',
+      complianceNote: 'Required for footer compliance (BCFSA).',
+      phonePlaceholder: '604-555-0123',
+      brokerageNamePlaceholder: 'e.g. Westcoast Premier Realty',
+      brokerageAddressPlaceholder: 'e.g. 1000 Example Blvd, Vancouver, BC V6B 0A0',
+      areasPlaceholder: 'e.g. Vancouver West, Burnaby Brentwood, Coquitlam, North Vancouver',
+      testimonialCityExample: 'e.g. Jamie L., Coquitlam'
+    },
+    AB: {
+      regulator: 'RECA',
+      licenseLabel: 'RECA licence number',
+      licensePlaceholder: 'e.g. 1234567',
+      licenseError: 'Please enter your RECA licence number.',
+      complianceNote: 'Required for footer compliance (RECA).',
+      phonePlaceholder: '403-555-0123',
+      brokerageNamePlaceholder: 'e.g. Foothills Premier Realty',
+      brokerageAddressPlaceholder: 'e.g. 1000 Example St SW, Calgary, AB T2P 0A0',
+      areasPlaceholder: 'e.g. Beltline, Mission, Inglewood, Bridgeland',
+      testimonialCityExample: 'e.g. Jamie L., Calgary'
+    },
+    ON: {
+      regulator: 'RECO',
+      licenseLabel: 'RECO registration number',
+      licensePlaceholder: 'e.g. 1234567',
+      licenseError: 'Please enter your RECO registration number.',
+      complianceNote: 'Required for footer compliance (RECO).',
+      phonePlaceholder: '416-555-0123',
+      brokerageNamePlaceholder: 'e.g. Lakeshore Premier Realty',
+      brokerageAddressPlaceholder: 'e.g. 1000 Example St, Toronto, ON M5H 0A0',
+      areasPlaceholder: 'e.g. Yorkville, Liberty Village, Leaside, The Beaches',
+      testimonialCityExample: 'e.g. Jamie L., Etobicoke'
+    }
+  };
+
+  function updateProvinceFields(province) {
+    var cfg = PROVINCE_CONFIG[province];
+    if (!cfg) return;
+    document.getElementById('cell').placeholder = cfg.phonePlaceholder;
+    document.getElementById('brokerageName').placeholder = cfg.brokerageNamePlaceholder;
+    document.getElementById('brokerageAddress').placeholder = cfg.brokerageAddressPlaceholder;
+    document.getElementById('brokerageComplianceNote').textContent = cfg.complianceNote;
+    document.getElementById('licenseLabelText').textContent = cfg.licenseLabel;
+    document.getElementById('licenseNumber').placeholder = cfg.licensePlaceholder;
+    document.getElementById('err-licenseNumber').textContent = cfg.licenseError;
+    document.getElementById('areas').placeholder = cfg.areasPlaceholder;
+    document.getElementById('testimonial1Name').placeholder = cfg.testimonialCityExample;
+  }
+
+  document.querySelectorAll('input[name="province"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      updateProvinceFields(this.value);
+      clearError('province');
+    });
+  });
+
   // ─── Step navigation state ────────────────────────────────────────────────
   var currentStep = 1;
   var TOTAL_STEPS = 5;
@@ -549,6 +621,7 @@
     var valid = true;
 
     if (n === 1) {
+      var province = document.querySelector('input[name="province"]:checked');
       var name = document.getElementById('fullName').value.trim();
       var email = document.getElementById('email').value.trim();
       var cell = document.getElementById('cell').value.trim();
@@ -557,6 +630,7 @@
       var licenseNumber = document.getElementById('licenseNumber').value.trim();
       var areas = document.getElementById('areas').value.trim();
 
+      if (!province) { showError('province', 'Please select your province.'); valid = false; } else clearError('province');
       if (!name) { showError('fullName'); valid = false; } else clearError('fullName');
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email address.'); valid = false; } else clearError('email');
       if (!cell) { showError('cell'); valid = false; } else clearError('cell');
@@ -666,9 +740,16 @@
     var moodWord = document.querySelector('input[name="moodWord"]:checked');
     var hasDomain = document.querySelector('input[name="hasDomain"]:checked');
 
+    var provinceSel = document.querySelector('input[name="province"]:checked');
+    var province = provinceSel ? provinceSel.value : '';
+    var regulator = (PROVINCE_CONFIG[province] || {}).regulator || '';
+
     var data = {
       formType: 'realtor-site-onboarding',
       timestamp: new Date().toISOString(),
+
+      province: province,
+      regulator: regulator,
 
       name: document.getElementById('fullName').value.trim(),
       email: document.getElementById('email').value.trim(),

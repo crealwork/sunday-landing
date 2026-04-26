@@ -34,7 +34,8 @@ var ONBOARDING_COLUMNS = [
   'Has Domain', 'Domain URL', 'Has Brand', 'Brand Drive Link', 'Fav Sites', 'Mood Word',
   'Headshot Drive Link', 'Languages', 'Avoid Note',
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
-  'Landing URL', 'Landing Referrer'
+  'Landing URL', 'Landing Referrer',
+  'Province', 'Regulator'
 ];
 
 function doPost(e) {
@@ -272,17 +273,24 @@ function buildClaudePromptForBuild(data) {
     '',
     'Workflow:',
     '1. Clone the starter to `clients/' + slug + '/website/`.',
-    '2. Read `clients/_archetype-registry.md` to see which archetype / typography / motion / anchor combos are already used. Stage 3 questions MUST exclude them for the most-recent realtor.',
-    '3. Run brainstorm skill (Q1-Q9). Hard rules: pick a different archetype than the last realtor (12 options A-L); NEVER reuse T1 Fraunces+Inter consecutively (10 options T1-T10); default motion M2 unless brand calls otherwise; Q8b specialty page = `/presales` (presale specialist) OR `/process` (generalist) OR both OR neither — URL slug MUST match actual specialty.',
-    '4. Update `clients/_archetype-registry.md` — append this realtor\'s chosen archetype + hero ID + typography ID + motion ID + anchor + specialty.',
-    '5. Fill DESIGN.md from brainstorm output + the brief below.',
-    '6. Generate images via gpt-image-2 (~10-12 images, $1-3 budget). Portraits in COLOR by default — never `grayscale` filter unless brief explicitly calls for B&W treatment.',
-    '7. Build pages — REWRITE `app/[locale]/page.tsx` from the chosen archetype\'s section grammar (do NOT copy Chloe or Hacey homepage). Rewrite Header + Footer if archetype demands different nav/footer style. Apply Q4 typography pairing in `app/[locale]/layout.tsx` font loading. Apply Q5 motion mode in `globals.css`. Implement Q8b — keep the chosen specialty page route, delete the unused one from app + nav + sitemap.',
-    '8. Wire forms: contact + value. Value page = MANUAL-REVIEW only by default (no algorithmic estimate shown — just lead capture + "realtor emails within 24h").',
-    '9. Strip `ko` locale (English-only default).',
-    '10. Full SEO: per-brand favicon set (run `scripts/generate-favicons.py`) + `site.webmanifest` + per-page unique title/description/OG image + JSON-LD (RealEstateAgent sitewide + Person on /about + FAQPage on Q&A) + sitemap + robots + llms.txt.',
-    '11. Deploy to Vercel (scope `dans-projects-a527926b`).',
-    '12. Reply with: preview URL, OpenAI cost, archetype+typography+motion combo chosen, any decisions needed.',
+    '2. **Inputs analysis — BEFORE brainstorm.** This is what makes the build fit the realtor\'s actual taste, not generic AI defaults.',
+    '   - If `Reference sites` (favSites) provided: crawl EACH URL with Firecrawl. Extract: dominant CSS colors (hex), `font-family` declarations, layout pattern (grid / full-bleed / long-form / bento / catalog), navigation style, density (sparse/medium/dense), motion mode if visible. Map findings to archetype candidates (A-L) + typography candidates (T1-T10). These become PRE-FILLED suggestions for Q1-Q5.',
+    '   - If `Existing brand assets` (brandDriveLink) provided: download contents via Google Drive MCP. Logo files → extract dominant + accent hex with PIL. Headshot → copy to `scripts/headshot-source.jpg`. Brand guidelines doc → parse for color/font/voice rules. Propose color palette for DESIGN.md from these.',
+    '   - If `Mood word` provided (no brand): use as the anchor for Q1 mood selection.',
+    '   - Document everything in `clients/' + slug + '/INPUTS.md` so brainstorm + DESIGN.md generation can reference it. Skip this step ONLY if NO favSites AND NO brandDriveLink AND NO moodWord were given.',
+    '3. Read `clients/_archetype-registry.md` to see which archetype / typography / motion / anchor combos are already used. Brainstorm Q2-Q5 MUST exclude them for the most-recent realtor.',
+    '4. Run brainstorm skill (Q1-Q9). Use Step 2 analysis as PRE-FILLED candidates per question — user confirms each or overrides. Hard rules: pick a different archetype than the last realtor (12 options A-L); NEVER reuse T1 Fraunces+Inter consecutively (10 options T1-T10); default motion M2 unless brand calls otherwise; Q8b specialty page = `/presales` (presale specialist) OR `/process` (generalist) OR both OR neither — URL slug MUST match actual specialty.',
+    '5. Update `clients/_archetype-registry.md` — append this realtor\'s chosen archetype + hero ID + typography ID + motion ID + anchor + specialty.',
+    '6. Fill DESIGN.md from brainstorm output + brief + Step 2 INPUTS.md. Color palette MUST reflect logo color extraction if a logo was provided. Voice rules MUST reflect the brief\'s `voice` field verbatim.',
+    '7. Generate images via gpt-image-2 (~10-12 images, $1-3 budget). Portraits in COLOR by default — never `grayscale` filter unless brief explicitly calls for B&W treatment.',
+    '8. Build pages — REWRITE `app/[locale]/page.tsx` from the chosen archetype\'s section grammar (do NOT copy Chloe or Hacey homepage). Rewrite Header + Footer if archetype demands different nav/footer style. Apply Q4 typography pairing in `app/[locale]/layout.tsx` font loading. Apply Q5 motion mode in `globals.css`. Implement Q8b — keep the chosen specialty page route, delete the unused one from app + nav + sitemap. **Footer compliance text MUST reference the `Regulator` from the brief above (BCFSA / RECA / RECO) — never hardcode "BCFSA" if Province is AB or ON. Use Canadian "licence" spelling for RECA, "registration number" for RECO.**',
+    '9. Wire forms: contact + value. Value page = MANUAL-REVIEW only by default (no algorithmic estimate shown — just lead capture + "realtor emails within 24h").',
+    '10. Strip `ko` locale (English-only default).',
+    '11. Full SEO: per-brand favicon set (run `scripts/generate-favicons.py`) + `site.webmanifest` + per-page unique title/description/OG image + JSON-LD (RealEstateAgent sitewide + Person on /about + FAQPage on Q&A) + sitemap + robots + llms.txt.',
+    '12. Deploy to Vercel (scope `dans-projects-a527926b`).',
+    '    - **Before first commit on the new repo:** `git config user.email "dan@crealwork.com"` (repo-local). Pro plan does NOT bypass the `Developer <developer@example.com>` placeholder block — locked 2026-04-25 after homesweetchloe deploy errored 0ms with empty logs.',
+    '    - **Before each commit:** grep `Header.tsx` + `Footer.tsx` (and any new component) for hardcoded years (`/[12][0-9]{3}—/`), tagline strings, or brand names. ALL must come from `messages/en.json` translation keys, never inline JSX. Locked 2026-04-25 after homesweetchloe shipped with hardcoded `2026—` next to a t() that read `2024—`.',
+    '13. Reply with: preview URL, OpenAI cost, archetype+typography+motion combo chosen, any decisions needed.',
     '',
     'Target delivery: 4-6 hours from start.',
     '',
@@ -292,9 +300,11 @@ function buildClaudePromptForBuild(data) {
     '',
     '## Identity',
     '- Name (as displayed): ' + (data.name || ''),
+    '- Province: ' + (data.province || '—'),
+    '- Regulator: ' + (data.regulator || '—'),
     '- Brokerage: ' + (data.brokerageName || ''),
     '- Brokerage office address: ' + (data.brokerageAddress || ''),
-    '- BCFSA license #: ' + (data.licenseNumber || ''),
+    '- ' + (data.regulator || 'Real estate license') + ' #: ' + (data.licenseNumber || ''),
     '- Cell: ' + (data.cell || ''),
     '- Email: ' + (data.email || ''),
     '- Service areas: ' + (data.areas || ''),
@@ -383,7 +393,9 @@ function saveOnboardingToSheet(data) {
     data.utm_content || '',
     data.utm_term || '',
     data.landing_url || '',
-    data.landing_referrer || ''
+    data.landing_referrer || '',
+    data.province || '',
+    data.regulator || ''
   ]);
 }
 
@@ -460,6 +472,8 @@ function buildOnboardingEmailHtml(data) {
     + '<table width="100%" cellpadding="0" cellspacing="0">'
 
     + row('Cell', data.cell)
+    + row('Province', data.province)
+    + row('Regulator', data.regulator)
     + row('Brokerage', data.brokerageName)
     + row('Brokerage Address', data.brokerageAddress)
     + row('License #', data.licenseNumber)
@@ -559,6 +573,8 @@ function sendTestPromptEmail() {
     formType: 'realtor-site-onboarding',
     name: 'Test Realtor (skill-prompt verification)',
     email: 'test-realtor@example.com',
+    province: 'BC',
+    regulator: 'BCFSA',
     cell: '(604) 000-0000',
     brokerageName: 'Test Brokerage Realty',
     brokerageAddress: 'Vancouver, BC',
