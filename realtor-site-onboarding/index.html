@@ -28,6 +28,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    // Load Vercel Blob client-upload helper from esm.sh CDN and expose globally
+    // so the (non-module) inline upload code below can use it. Browser uploads
+    // file directly to Blob using a short-lived signed token from /api/upload —
+    // bypasses the 4.5 MB Vercel function body limit and matches the official
+    // Vercel Blob "client uploads" pattern.
+    import { upload } from 'https://esm.sh/@vercel/blob@0.27.0/client';
+    window.vercelBlobUpload = upload;
+  </script>
   <script>
     tailwind.config = {
       theme: {
@@ -792,6 +801,10 @@
     }
   }
 
+  function sanitizeName(s) {
+    return String(s || 'file').replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+  }
+
   function uploadOne(slot, tempId) {
     var entry = UPLOAD_STATE[slot].filter(function(f) { return f.tempId === tempId; })[0];
     if (!entry) return;
@@ -799,34 +812,36 @@
     entry.progress = 0;
     renderSlot(slot);
 
-    var form = new FormData();
-    form.append('file', entry.file, entry.name);
-    form.append('slot', slot);
-    form.append('sessionId', UPLOAD_STATE.sessionId);
+    if (typeof window.vercelBlobUpload !== 'function') {
+      entry.status = 'failed';
+      renderSlot(slot);
+      return;
+    }
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/upload');
-    xhr.upload.onprogress = function(e) {
-      if (e.lengthComputable) {
-        entry.progress = Math.round((e.loaded / e.total) * 100);
+    var pathname = 'realtor-onboarding/' + UPLOAD_STATE.sessionId
+      + '/' + slot + '-' + Date.now() + '-' + sanitizeName(entry.name);
+
+    window.vercelBlobUpload(pathname, entry.file, {
+      access: 'public',
+      handleUploadUrl: '/api/upload',
+      contentType: entry.type || 'application/octet-stream',
+      clientPayload: JSON.stringify({ slot: slot, sessionId: UPLOAD_STATE.sessionId }),
+      onUploadProgress: function(p) {
+        // p has { loaded, total, percentage } (or just percentage)
+        var pct = p && typeof p.percentage === 'number' ? p.percentage : 0;
+        entry.progress = Math.round(pct);
         renderSlot(slot);
       }
-    };
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          var resp = JSON.parse(xhr.responseText);
-          entry.status = 'done';
-          entry.url = resp.url;
-          entry.progress = 100;
-        } catch (e) { entry.status = 'failed'; }
-      } else {
-        entry.status = 'failed';
-      }
+    }).then(function(blob) {
+      entry.status = 'done';
+      entry.url = blob.url;
+      entry.progress = 100;
       renderSlot(slot);
-    };
-    xhr.onerror = function() { entry.status = 'failed'; renderSlot(slot); };
-    xhr.send(form);
+    }).catch(function(err) {
+      console.error('Upload failed for', entry.name, err);
+      entry.status = 'failed';
+      renderSlot(slot);
+    });
   }
 
   function removeFile(slot, tempId) {
