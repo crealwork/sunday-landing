@@ -1,6 +1,9 @@
 import { put } from '@vercel/blob';
 
-export const config = { runtime: 'edge' };
+// Node.js runtime — @vercel/blob uses streams that aren't available in Edge.
+// Cold start ~200-500ms vs ~0ms on Edge, but uploads happen optimistically
+// while the user fills out the form, so latency is hidden.
+export const config = { runtime: 'nodejs' };
 
 const SLOTS = new Set(['headshot', 'logo', 'brand']);
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
