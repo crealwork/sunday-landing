@@ -2,7 +2,8 @@
   "name": "sunday-landing",
   "version": "1.0.0",
   "private": true,
-  "description": "Sunday landing site + realtor onboarding form (Vercel static + edge functions for uploads)",
+  "type": "module",
+  "description": "Sunday landing site + Node.js serverless functions (uploads to Vercel Blob).",
   "dependencies": {
     "@vercel/blob": "^0.27.0"
   }
