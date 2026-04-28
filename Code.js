@@ -35,8 +35,36 @@ var ONBOARDING_COLUMNS = [
   'Headshot Drive Link', 'Languages', 'Avoid Note',
   'UTM Source', 'UTM Medium', 'UTM Campaign', 'UTM Content', 'UTM Term',
   'Landing URL', 'Landing Referrer',
-  'Province', 'Regulator'
+  'Province', 'Regulator',
+  'Headshot URLs', 'Logo URLs', 'Brand Asset URLs', 'Upload Session ID'
 ];
+
+/**
+ * Parse a JSON-stringified array of {url, name, size} into a newline-joined
+ * list of URLs for sheet display. Returns empty string on parse failure.
+ */
+function urlListString(jsonStr) {
+  try {
+    var arr = JSON.parse(jsonStr || '[]');
+    if (!Array.isArray(arr)) return '';
+    return arr.map(function(f) { return f && f.url ? f.url : ''; }).filter(Boolean).join('\n');
+  } catch (e) {
+    return '';
+  }
+}
+
+/**
+ * Same as urlListString but returns the parsed array, for richer rendering
+ * (e.g. with file names + sizes in the notification email).
+ */
+function parseFileArray(jsonStr) {
+  try {
+    var arr = JSON.parse(jsonStr || '[]');
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    return [];
+  }
+}
 
 function doPost(e) {
   try {
@@ -254,9 +282,28 @@ function buildClaudePromptForBuild(data) {
   var slug = slugify(data.name) || 'new-realtor';
   var hasBrandAssets = data.hasBrand === 'Yes';
 
-  var brand = hasBrandAssets
-    ? '- Existing brand assets: ' + (data.brandDriveLink || '(no link)')
-    : '- No existing brand\n- Mood word: ' + (data.moodWord || '—') + '\n- Reference sites: ' + (data.favSites || '—');
+  function fileListBlock(prefix, jsonStr) {
+    var arr = parseFileArray(jsonStr);
+    if (!arr.length) return '';
+    return arr.map(function(f) { return prefix + (f.url || '') + ' (' + (f.name || 'file') + ')'; }).join('\n');
+  }
+
+  var headshotFilesText = fileListBlock('- ', data.headshotFiles);
+  var logoFilesText = fileListBlock('- ', data.logoFiles);
+  var brandFilesText = fileListBlock('- ', data.brandFiles);
+
+  var brand;
+  if (hasBrandAssets) {
+    if (brandFilesText) {
+      brand = '- Uploaded brand files (download via HTTPS):\n' + brandFilesText;
+    } else if (data.brandDriveLink) {
+      brand = '- Brand Drive folder: ' + data.brandDriveLink;
+    } else {
+      brand = '- (Realtor selected "has brand" but no files or link provided — email them to follow up.)';
+    }
+  } else {
+    brand = '- No existing brand\n- Mood word: ' + (data.moodWord || '—') + '\n- Reference sites: ' + (data.favSites || '—');
+  }
 
   return [
     "I'm building a new realtor website. Use the existing tooling:",
@@ -275,7 +322,11 @@ function buildClaudePromptForBuild(data) {
     '1. Clone the starter to `clients/' + slug + '/website/`.',
     '2. **Inputs analysis — BEFORE brainstorm.** This is what makes the build fit the realtor\'s actual taste, not generic AI defaults.',
     '   - If `Reference sites` (favSites) provided: crawl EACH URL with Firecrawl. Extract: dominant CSS colors (hex), `font-family` declarations, layout pattern (grid / full-bleed / long-form / bento / catalog), navigation style, density (sparse/medium/dense), motion mode if visible. Map findings to archetype candidates (A-L) + typography candidates (T1-T10). These become PRE-FILLED suggestions for Q1-Q5.',
-    '   - If `Existing brand assets` (brandDriveLink) provided: download contents via Google Drive MCP. Logo files → extract dominant + accent hex with PIL. Headshot → copy to `scripts/headshot-source.jpg`. Brand guidelines doc → parse for color/font/voice rules. Propose color palette for DESIGN.md from these.',
+    '   - If `Headshot` URLs provided: download all via HTTPS (curl/fetch, public Vercel Blob URLs — no auth). Copy the first one to `scripts/headshot-source.jpg`. Keep the rest as alternates in `clients/' + slug + '/headshots/`.',
+    '   - If `Logo` URLs provided: download via HTTPS. Extract dominant + accent hex with PIL — these become DESIGN.md color anchors.',
+    '   - If `Brand` uploaded files provided: download all via HTTPS. Brand guidelines PDF → parse for color/font/voice rules. PSD/AI/ZIP → extract assets.',
+    '   - If only `Brand Drive folder` link given (no upload): download via Google Drive MCP. Same extraction as above.',
+    '   - If `Reference sites` (favSites) provided (typically when no brand kit exists): crawl with Firecrawl as before.',
     '   - If `Mood word` provided (no brand): use as the anchor for Q1 mood selection.',
     '   - Document everything in `clients/' + slug + '/INPUTS.md` so brainstorm + DESIGN.md generation can reference it. Skip this step ONLY if NO favSites AND NO brandDriveLink AND NO moodWord were given.',
     '3. Read `clients/_archetype-registry.md` to see which archetype / typography / motion / anchor combos are already used. Brainstorm Q2-Q5 MUST exclude them for the most-recent realtor.',
@@ -322,7 +373,10 @@ function buildClaudePromptForBuild(data) {
     brand,
     '',
     '## Headshot',
-    '- ' + (data.headshotLink || '—'),
+    headshotFilesText || '- (none uploaded)',
+    '',
+    '## Logo',
+    logoFilesText || '- (none uploaded — design or skip)',
     '',
     '## Add-ons & content',
     '- Presale projects to feature: ' + (data.presaleProjects || '—'),
@@ -395,7 +449,11 @@ function saveOnboardingToSheet(data) {
     data.landing_url || '',
     data.landing_referrer || '',
     data.province || '',
-    data.regulator || ''
+    data.regulator || '',
+    urlListString(data.headshotFiles),
+    urlListString(data.logoFiles),
+    urlListString(data.brandFiles),
+    data.uploadSessionId || ''
   ]);
 }
 
@@ -439,6 +497,23 @@ function buildOnboardingEmailHtml(data) {
       + '</td>'
       + '<td style="padding:8px 0;text-align:right;">'
       + '<a href="' + escapeHtml(url) + '" style="font-size:14px;color:#800020;font-weight:500;">' + escapeHtml(url) + '</a>'
+      + '</td>'
+      + '</tr>';
+  }
+
+  function fileListRow(label, jsonStr) {
+    var arr = parseFileArray(jsonStr);
+    if (arr.length === 0) return '';
+    var items = arr.map(function(f) {
+      return '<a href="' + escapeHtml(f.url || '') + '" style="display:block;font-size:13px;color:#0A0A0A;text-decoration:underline;line-height:1.6;">'
+        + escapeHtml(f.name || 'file') + '</a>';
+    }).join('');
+    return '<tr>'
+      + '<td style="padding:8px 0;vertical-align:top;width:40%;">'
+      + '<p style="margin:0;font-size:11px;font-weight:600;color:#6B6B6B;text-transform:uppercase;letter-spacing:1px;">' + label + ' (' + arr.length + ')</p>'
+      + '</td>'
+      + '<td style="padding:8px 0;text-align:right;">'
+      + items
       + '</td>'
       + '</tr>';
   }
@@ -494,7 +569,9 @@ function buildOnboardingEmailHtml(data) {
     + linkRow('Brand Drive Link', data.brandDriveLink)
     + row('Fav Sites', data.favSites)
     + row('Mood Word', data.moodWord)
-    + linkRow('Headshot Drive Link', data.headshotLink)
+    + fileListRow('Headshot files', data.headshotFiles)
+    + fileListRow('Logo files', data.logoFiles)
+    + fileListRow('Brand files', data.brandFiles)
 
     + '<tr><td colspan="2" style="padding:12px 0 4px;"><div style="border-top:1px solid #F0F0F0;"></div></td></tr>'
 
@@ -593,7 +670,13 @@ function sendTestPromptEmail() {
     hasBrand: 'No',
     moodWord: 'Calm',
     favSites: 'https://www.aritzia.com/, https://www.evernew.ca/',
-    headshotLink: 'https://example.com/test-headshot.jpg',
+    headshotFiles: JSON.stringify([
+      { url: 'https://example-blob.vercel-storage.com/realtor-onboarding/test-uuid/headshot-1714250000-test.jpg', name: 'test-headshot-01.jpg', size: 2400000 },
+      { url: 'https://example-blob.vercel-storage.com/realtor-onboarding/test-uuid/headshot-1714250012-test2.jpg', name: 'test-headshot-02.jpg', size: 3100000 }
+    ]),
+    logoFiles: JSON.stringify([]),
+    brandFiles: JSON.stringify([]),
+    uploadSessionId: 'test-uuid-0000-0000-0000-000000000000',
     avoidNote: '—',
     timestamp: new Date()
   };

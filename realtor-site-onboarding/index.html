@@ -154,6 +154,70 @@
     @keyframes stepIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     .step-exit { animation: stepOut 0.2s ease both; }
     @keyframes stepOut { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Upload widget */
+    .upload-dropzone {
+      border: 2px dashed #E5E5E5;
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      position: relative;
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: #0A0A0A;
+      background: #FAFAFA;
+    }
+    .upload-dropzone input[type="file"] { display: none; }
+    .upload-icon { font-size: 1.5rem; display: block; margin-bottom: 0.4rem; }
+    .upload-text { font-size: 0.875rem; color: #6B6B6B; line-height: 1.4; }
+    .upload-text strong { color: #0A0A0A; font-weight: 600; }
+
+    .upload-list { margin-top: 0.5rem; }
+    .upload-row {
+      display: flex; align-items: center; gap: 0.625rem;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #E5E5E5;
+      border-radius: 8px;
+      margin-top: 0.4rem;
+      font-size: 0.875rem;
+      background: #FFFFFF;
+    }
+    .upload-row.uploading { background: #FAFAFA; }
+    .upload-row.failed { border-color: #800020; background: rgba(128, 0, 32, 0.04); }
+    .upload-status { width: 16px; flex-shrink: 0; text-align: center; font-size: 0.875rem; line-height: 1; }
+    .upload-status.done { color: #0A0A0A; }
+    .upload-status.failed { color: #800020; }
+    .upload-name {
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      color: #0A0A0A;
+    }
+    .upload-size { color: #6B6B6B; font-size: 0.8125rem; flex-shrink: 0; }
+    .upload-progress {
+      width: 60px; height: 3px; background: #E5E5E5; border-radius: 2px; overflow: hidden; flex-shrink: 0;
+    }
+    .upload-progress-fill { height: 100%; background: #0A0A0A; transition: width 0.2s ease; width: 0%; }
+    .upload-action {
+      background: none; border: none; cursor: pointer;
+      padding: 0.25rem 0.5rem; font-size: 0.8125rem; color: #6B6B6B;
+      border-radius: 4px; transition: color 0.15s ease;
+    }
+    .upload-action:hover { color: #0A0A0A; }
+    .upload-action.retry { color: #800020; font-weight: 500; }
+
+    .upload-toggle {
+      display: flex; gap: 0.4rem; margin: 0.75rem 0;
+    }
+    .upload-toggle button {
+      flex: 1; padding: 0.5rem 0.75rem; border: 1px solid #E5E5E5; background: #FFFFFF;
+      border-radius: 9999px; font-size: 0.8125rem; font-weight: 500; cursor: pointer;
+      color: #6B6B6B;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .upload-toggle button.active { background: #0A0A0A; color: #FFFFFF; border-color: #0A0A0A; }
+    .upload-toggle button:hover:not(.active) { border-color: #0A0A0A; color: #0A0A0A; }
   </style>
 </head>
 <body class="bg-surface text-ink font-body antialiased">
@@ -385,20 +449,64 @@
 
           <div class="space-y-7">
 
+            <!-- Headshot upload (required) -->
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Headshot(s) <span class="text-accent">*</span></label>
+              <p class="text-xs text-muted mb-2">Up to 5 photos · 10 MB each · JPG/PNG/HEIC/WebP. Multiple poses or outfits welcome.</p>
+              <div class="upload-dropzone" data-slot="headshot" tabindex="0">
+                <span class="upload-icon">📷</span>
+                <span class="upload-text"><strong>Drop photos here</strong> or click to browse</span>
+                <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/heic,image/heif" data-slot-input="headshot">
+              </div>
+              <div class="upload-list" id="uploadList-headshot"></div>
+              <p class="error-msg" id="err-headshot">Please upload at least one headshot.</p>
+            </div>
+
+            <!-- Logo upload (optional) -->
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Logo (optional)</label>
+              <p class="text-xs text-muted mb-2">Up to 3 files · 10 MB each · PNG/SVG/PDF preferred. Skip if you don't have one yet.</p>
+              <div class="upload-dropzone" data-slot="logo" tabindex="0">
+                <span class="upload-icon">🅰️</span>
+                <span class="upload-text"><strong>Drop logo files</strong> or click to browse</span>
+                <input type="file" multiple accept="image/*,application/pdf,.svg" data-slot-input="logo">
+              </div>
+              <div class="upload-list" id="uploadList-logo"></div>
+            </div>
+
             <!-- Brand guidelines radio -->
             <div>
-              <label class="block text-sm font-medium mb-3">Do you already have brand guidelines or a logo? <span class="text-accent">*</span></label>
+              <label class="block text-sm font-medium mb-3">Do you have brand guidelines or other assets to share? <span class="text-accent">*</span></label>
               <div class="radio-group" id="hasBrandGroup">
                 <div class="radio-item"><input type="radio" id="brand-yes" name="hasBrand" value="Yes"><label for="brand-yes">Yes</label></div>
                 <div class="radio-item"><input type="radio" id="brand-no" name="hasBrand" value="No"><label for="brand-no">No</label></div>
               </div>
               <p class="error-msg" id="err-hasBrand">Please select an option.</p>
 
-              <!-- If Yes: Drive link -->
-              <div class="conditional-reveal" id="brandDriveReveal">
-                <label class="block text-sm font-medium mb-1.5 mt-4" for="brandDriveLink">Google Drive share link</label>
-                <input type="url" id="brandDriveLink" name="brandDriveLink" class="field-input" placeholder="https://drive.google.com/drive/folders/…">
-                <p class="text-xs text-muted mt-2">Set the link to "Anyone with the link can view" — or simply email the assets to <a href="mailto:hello@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">hello@sundayable.com</a>.</p>
+              <!-- If Yes: upload OR Drive link toggle -->
+              <div class="conditional-reveal" id="brandAssetsReveal">
+                <div class="upload-toggle" id="brandModeToggle">
+                  <button type="button" data-mode="upload" class="active">Upload files</button>
+                  <button type="button" data-mode="drive">Share a Drive folder</button>
+                </div>
+
+                <!-- Upload mode -->
+                <div id="brandUploadMode">
+                  <p class="text-xs text-muted mb-2">Up to 10 files · 10 MB each · images, PDFs, ZIPs all OK.</p>
+                  <div class="upload-dropzone" data-slot="brand" tabindex="0">
+                    <span class="upload-icon">📁</span>
+                    <span class="upload-text"><strong>Drop files here</strong> or click to browse</span>
+                    <input type="file" multiple accept="image/*,application/pdf,application/zip,.svg,.ai,.psd" data-slot-input="brand">
+                  </div>
+                  <div class="upload-list" id="uploadList-brand"></div>
+                </div>
+
+                <!-- Drive link mode -->
+                <div id="brandDriveMode" style="display:none;">
+                  <label class="block text-sm font-medium mb-1.5 mt-2" for="brandDriveLink">Google Drive folder link</label>
+                  <input type="url" id="brandDriveLink" name="brandDriveLink" class="field-input" placeholder="https://drive.google.com/drive/folders/…">
+                  <p class="text-xs text-muted mt-2">Set to "Anyone with the link can view" — or email assets to <a href="mailto:hello@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">hello@sundayable.com</a>.</p>
+                </div>
               </div>
 
               <!-- If No: fav sites + mood word -->
@@ -431,14 +539,6 @@
                 </div>
 
               </div>
-            </div>
-
-            <!-- Headshot -->
-            <div>
-              <label class="block text-sm font-medium mb-1.5" for="headshotLink">Headshot — Google Drive share link <span class="text-accent">*</span></label>
-              <input type="url" id="headshotLink" name="headshotLink" class="field-input" placeholder="https://drive.google.com/file/d/…">
-              <p class="text-xs text-muted mt-2">Set to "Anyone with the link can view" — or email it to <a href="mailto:hello@sundayable.com" class="text-ink underline underline-offset-2 hover:text-accent transition">hello@sundayable.com</a>. Best resolution you have, even a phone shot works.</p>
-              <p class="error-msg" id="err-headshotLink">Please add a Google Drive link to your headshot.</p>
             </div>
 
           </div>
@@ -573,6 +673,231 @@
     });
   });
 
+  // ─── Upload state + helpers ───────────────────────────────────────────────
+  function makeUuid() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0;
+      var v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  var UPLOAD_STATE = {
+    sessionId: makeUuid(),
+    headshot: [],
+    logo: [],
+    brand: [],
+    brandMode: 'upload'
+  };
+
+  var UPLOAD_LIMITS = {
+    headshot: { max: 5, maxBytes: 10 * 1024 * 1024 },
+    logo:     { max: 3, maxBytes: 10 * 1024 * 1024 },
+    brand:    { max: 10, maxBytes: 10 * 1024 * 1024 }
+  };
+
+  function nextTempId() {
+    return 't' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+  }
+
+  function fmtSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+  }
+
+  // Render upload list using DOM APIs (no innerHTML — keeps user-supplied
+  // filenames safe even though they're already escaped via textContent).
+  function renderSlot(slot) {
+    var list = document.getElementById('uploadList-' + slot);
+    if (!list) return;
+    while (list.firstChild) list.removeChild(list.firstChild);
+
+    UPLOAD_STATE[slot].forEach(function(f) {
+      var row = document.createElement('div');
+      row.className = 'upload-row ' + f.status;
+
+      var status = document.createElement('span');
+      status.className = 'upload-status' + (f.status === 'done' ? ' done' : f.status === 'failed' ? ' failed' : '');
+      status.textContent = f.status === 'done' ? '✓' : f.status === 'failed' ? '✗' : '⏳';
+      row.appendChild(status);
+
+      var name = document.createElement('span');
+      name.className = 'upload-name';
+      name.textContent = f.name;
+      row.appendChild(name);
+
+      if (f.status === 'uploading') {
+        var prog = document.createElement('div');
+        prog.className = 'upload-progress';
+        var fill = document.createElement('div');
+        fill.className = 'upload-progress-fill';
+        fill.style.width = (f.progress || 0) + '%';
+        prog.appendChild(fill);
+        row.appendChild(prog);
+      } else {
+        var size = document.createElement('span');
+        size.className = 'upload-size';
+        size.textContent = fmtSize(f.size);
+        row.appendChild(size);
+      }
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.slot = slot;
+      btn.dataset.tempId = f.tempId;
+      if (f.status === 'failed') {
+        btn.className = 'upload-action retry';
+        btn.textContent = 'Retry';
+      } else {
+        btn.className = 'upload-action remove';
+        btn.textContent = '×';
+        btn.setAttribute('aria-label', 'Remove');
+      }
+      row.appendChild(btn);
+
+      list.appendChild(row);
+    });
+  }
+
+  function addFiles(slot, fileList) {
+    var limit = UPLOAD_LIMITS[slot];
+    if (!limit) return;
+    var files = Array.prototype.slice.call(fileList);
+    for (var i = 0; i < files.length; i++) {
+      if (UPLOAD_STATE[slot].length >= limit.max) {
+        alert('Max ' + limit.max + ' files for ' + slot + '.');
+        break;
+      }
+      var file = files[i];
+      if (!file || file.size === 0) { alert((file && file.name || 'File') + ' is empty.'); continue; }
+      if (file.size > limit.maxBytes) { alert(file.name + ' is too large (max 10 MB).'); continue; }
+      var tempId = nextTempId();
+      UPLOAD_STATE[slot].push({
+        tempId: tempId,
+        file: file,
+        name: file.name,
+        size: file.size,
+        type: file.type || '',
+        status: 'uploading',
+        progress: 0,
+        url: ''
+      });
+      if (slot === 'headshot') clearError('headshot');
+      renderSlot(slot);
+      uploadOne(slot, tempId);
+    }
+  }
+
+  function uploadOne(slot, tempId) {
+    var entry = UPLOAD_STATE[slot].filter(function(f) { return f.tempId === tempId; })[0];
+    if (!entry) return;
+    entry.status = 'uploading';
+    entry.progress = 0;
+    renderSlot(slot);
+
+    var form = new FormData();
+    form.append('file', entry.file, entry.name);
+    form.append('slot', slot);
+    form.append('sessionId', UPLOAD_STATE.sessionId);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/upload');
+    xhr.upload.onprogress = function(e) {
+      if (e.lengthComputable) {
+        entry.progress = Math.round((e.loaded / e.total) * 100);
+        renderSlot(slot);
+      }
+    };
+    xhr.onload = function() {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          entry.status = 'done';
+          entry.url = resp.url;
+          entry.progress = 100;
+        } catch (e) { entry.status = 'failed'; }
+      } else {
+        entry.status = 'failed';
+      }
+      renderSlot(slot);
+    };
+    xhr.onerror = function() { entry.status = 'failed'; renderSlot(slot); };
+    xhr.send(form);
+  }
+
+  function removeFile(slot, tempId) {
+    var arr = UPLOAD_STATE[slot];
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].tempId === tempId) { arr.splice(i, 1); break; }
+    }
+    renderSlot(slot);
+  }
+
+  function hasInflightUploads() {
+    return ['headshot', 'logo', 'brand'].some(function(slot) {
+      return UPLOAD_STATE[slot].some(function(f) { return f.status === 'uploading'; });
+    });
+  }
+
+  // Wire each dropzone
+  document.querySelectorAll('.upload-dropzone').forEach(function(zone) {
+    var slot = zone.dataset.slot;
+    var input = zone.querySelector('input[type="file"]');
+    if (!input) return;
+    zone.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'INPUT') input.click();
+    });
+    zone.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
+    zone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', function() {
+      zone.classList.remove('dragover');
+    });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      if (e.dataTransfer && e.dataTransfer.files) addFiles(slot, e.dataTransfer.files);
+    });
+    input.addEventListener('change', function(e) {
+      addFiles(slot, e.target.files);
+      e.target.value = '';
+    });
+  });
+
+  // Event-delegated remove + retry buttons
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest && e.target.closest('.upload-action');
+    if (!btn) return;
+    var slot = btn.dataset.slot;
+    var tempId = btn.dataset.tempId;
+    if (!slot || !tempId) return;
+    if (btn.classList.contains('retry')) uploadOne(slot, tempId);
+    else if (btn.classList.contains('remove')) removeFile(slot, tempId);
+  });
+
+  // Brand mode toggle (upload vs drive)
+  document.querySelectorAll('#brandModeToggle button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var mode = this.dataset.mode;
+      UPLOAD_STATE.brandMode = mode;
+      document.querySelectorAll('#brandModeToggle button').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.mode === mode);
+      });
+      var uploadMode = document.getElementById('brandUploadMode');
+      var driveMode = document.getElementById('brandDriveMode');
+      if (uploadMode) uploadMode.style.display = mode === 'upload' ? '' : 'none';
+      if (driveMode) driveMode.style.display = mode === 'drive' ? '' : 'none';
+    });
+  });
+
   // ─── Step navigation state ────────────────────────────────────────────────
   var currentStep = 1;
   var TOTAL_STEPS = 5;
@@ -656,9 +981,20 @@
 
     if (n === 4) {
       var hasBrand = document.querySelector('input[name="hasBrand"]:checked');
-      var headshot = document.getElementById('headshotLink').value.trim();
       if (!hasBrand) { showError('hasBrand', 'Please select an option.'); valid = false; } else clearError('hasBrand');
-      if (!headshot) { showError('headshotLink'); valid = false; } else clearError('headshotLink');
+
+      var doneHeadshots = UPLOAD_STATE.headshot.filter(function(f) { return f.status === 'done'; }).length;
+      if (doneHeadshots === 0) {
+        showError('headshot', 'Please upload at least one headshot.');
+        valid = false;
+      } else {
+        clearError('headshot');
+      }
+
+      if (hasInflightUploads()) {
+        alert('Uploads still in progress — please wait a moment, then click Continue again.');
+        valid = false;
+      }
     }
 
     return valid;
@@ -707,10 +1043,10 @@
     });
   });
 
-  // Brand: Yes → Drive link, No → fav sites
+  // Brand: Yes → assets reveal (upload OR drive toggle), No → fav sites
   document.querySelectorAll('input[name="hasBrand"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
-      document.getElementById('brandDriveReveal').classList.toggle('open', this.value === 'Yes');
+      document.getElementById('brandAssetsReveal').classList.toggle('open', this.value === 'Yes');
       document.getElementById('favSitesReveal').classList.toggle('open', this.value === 'No');
     });
   });
@@ -778,11 +1114,30 @@
       domainUrl: document.getElementById('domainUrl').value.trim(),
 
       hasBrand: hasBrand ? hasBrand.value : '',
-      brandDriveLink: document.getElementById('brandDriveLink').value.trim(),
+      brandDriveLink: (UPLOAD_STATE.brandMode === 'drive')
+        ? (document.getElementById('brandDriveLink').value || '').trim()
+        : '',
       favSites: favSites,
       moodWord: moodWord ? moodWord.value : '',
 
-      headshotLink: document.getElementById('headshotLink').value.trim(),
+      headshotFiles: JSON.stringify(
+        UPLOAD_STATE.headshot
+          .filter(function(f) { return f.status === 'done'; })
+          .map(function(f) { return { url: f.url, name: f.name, size: f.size }; })
+      ),
+      logoFiles: JSON.stringify(
+        UPLOAD_STATE.logo
+          .filter(function(f) { return f.status === 'done'; })
+          .map(function(f) { return { url: f.url, name: f.name, size: f.size }; })
+      ),
+      brandFiles: (UPLOAD_STATE.brandMode === 'upload')
+        ? JSON.stringify(
+            UPLOAD_STATE.brand
+              .filter(function(f) { return f.status === 'done'; })
+              .map(function(f) { return { url: f.url, name: f.name, size: f.size }; })
+          )
+        : '[]',
+      uploadSessionId: UPLOAD_STATE.sessionId,
 
       languages: document.getElementById('languages').value.trim(),
       avoidNote: document.getElementById('avoidNote').value.trim(),
